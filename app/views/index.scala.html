@@ -1,7 +1,7 @@
-@(message: String)
+@(message: String, name: String)
 
 @main("Welcome to Play") {
 
-    @play20.welcome(message)
-
+    <h1>@message, @name</h1>
+    <a href="@routes.Application.about()">About</a>
 }
