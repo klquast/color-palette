@@ -32,9 +32,14 @@
 }
 
 body {
+    background: url(../images/brilliant.png) repeat-x 0 0, url(../images/brilliant.png) repeat 0 0, #FEFEFE;
     color: #404040;
     font-family: "Droid Sans", "Trebuchet MS", Arial, Helvetica, sans-serif;
     padding: 0;
+}
+body.dark {
+    background: url(../images/noisy_net.png) repeat-x 0 0, url(../images/noisy_net.png) repeat 0 0, #FEFEFE;
+    color: #f7f7f7;
 }
 
 p {
@@ -44,4 +49,10 @@ p {
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
    font-family: "Droid Sans", "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+.toggle-bg-color {
+    position: absolute;
+    right: 10px;
+    top: 5px;
 }
