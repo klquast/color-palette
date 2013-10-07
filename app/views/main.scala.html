@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, scripts: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
 
@@ -11,10 +11,12 @@
         <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
     </head>
     <body class="top">
-        <a href="javascript:;" class="toggle-bg-color">Toggle Background Color</a>
+        <button class="toggle-bg-color btn btn-default btn-xs">Toggle Background Color</button>
         <div class="container">
             @content
         </div>
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
+        @scripts
     </body>
 </html>
