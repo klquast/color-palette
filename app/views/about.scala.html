@@ -11,7 +11,7 @@
     <script type="text/javascript">
         $(function(){
             alert(hsvToRgb(280, 75, 82));
-            alert(rgbToHsv(156, 52, 209));
+            alert(rgbToHsv(157, 52, 209));
         });
 
         function hsvToRgb(hue, sat, value){
@@ -35,9 +35,9 @@
                 case 5: r = value, g = p, b = q; break;
             }
 
-            r = Math.floor(r * 255);
-            g = Math.floor(g * 255);
-            b = Math.floor(b * 255);
+            r = Math.round(r * 255);
+            g = Math.round(g * 255);
+            b = Math.round(b * 255);
 
             return [r, g, b];
         }
