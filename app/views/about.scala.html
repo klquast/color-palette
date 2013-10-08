@@ -11,6 +11,7 @@
     <script type="text/javascript">
         $(function(){
             alert(hsvToRgb(280, 75, 82));
+            alert(rgbToHsv(156, 52, 209));
         });
 
         function hsvToRgb(hue, sat, value){
@@ -41,7 +42,28 @@
             return [r, g, b];
         }
 
+        function rgbToHsv(red, green, blue) {
+            var h, s, v;
 
+            red /= 255;
+            green /= 255;
+            blue /= 255;
+
+            var maxRgb = Math.max(red, green, blue);
+            var minRgb = Math.min(red, green, blue);
+
+            if(minRgb == maxRgb) {
+                return [0, 0, minRbg];
+            }
+
+            var d = (red == minRgb) ? green - blue : ((blue == minRgb) ? red - green : blue - red);
+            var hd = (red == minRgb) ? 3 : ((blue == minRgb) ? 1 : 5);
+            h = 60 * (hd - d / (maxRgb - minRgb));
+            s = (maxRgb - minRgb) / maxRgb;
+            v = maxRgb;
+
+            return [Math.round(h), Math.round(s*100), Math.round(v*100)];
+        }
     </script>
 }
 
