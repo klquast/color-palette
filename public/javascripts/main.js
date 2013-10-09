@@ -4,7 +4,7 @@ $(function(){
         //$(this).toggleClass('btn-primary').toggleClass('btn-default')
     });
 
-    $( ".selected-color-circle" ).draggable({
+    $('.selected-color-circle').draggable({
         containment: ".color-picker",
         scroll: false,
         drag: function() {
@@ -14,6 +14,53 @@ $(function(){
             $('.brightness').html(brightness);
         }
     });
+
+    $('body').on('click', '.color-picker-backdrop', function(e){
+        var posX = $(this).offset().left,
+            posY = $(this).offset().top;
+        if(e.pageY < posY || e.pageY > (posY + 256) || e.pageX < posX || e.pageX > (posX + 256)) {
+            return false;
+        }
+        $('.selected-color-circle').css({
+            top: (e.pageY - posY) - 8.5,
+            left: (e.pageX - posX) - 8
+        });
+        var saturation = calcSaturation();
+        var brightness = calcBrightness();
+        $('.saturation').html(saturation);
+        $('.brightness').html(brightness);
+        $('.pixel-offset').html(((e.pageX - posX) - 8)+ ' , ' + ((e.pageY - posY) - 8.5));
+    });
+
+    $('body').on('click', '.hue-slider-backdrop', function(e){
+        var posY = $(this).offset().top;
+        if(e.pageY < posY || e.pageY > (posY + 256)) {
+            return false;
+        }
+        $('.selected-hue-arrows').css({
+            top: (e.pageY - posY) - 8.5
+        });
+        var hue = calcHue();
+        $('.hue').html(hue);
+        $('.pixel-offset').html((e.pageY - posY) - 8.5);
+    });
+
+    $('.selected-hue-arrows').draggable({
+        axis: 'y',
+        containment: ".hue-slider",
+        scroll: false,
+        drag: function() {
+            var hue = calcHue();
+            $('.hue').html(hue);
+        }
+    });
+
+    function calcHue() {
+        var pos = $('.selected-hue-arrows').css('top')
+        pos = parseInt(pos);
+        var div = 256/360;
+        return 360 - Math.round((pos + 8)/div);
+    }
 
     function calcSaturation() {
         var pos = $('.selected-color-circle').css('left')

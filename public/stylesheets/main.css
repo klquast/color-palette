@@ -81,3 +81,24 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     top: 120px;
     width: 16px;
 }
+
+/* Hue Slider */
+.hue-slider {
+    height: 270px;
+    position: relative;
+    width: 20px;
+}
+
+.hue-slider-backdrop {
+    position: relative;
+    top: 8px;
+}
+
+.selected-hue-arrows {
+    background-image: url('../images/selected-hue-arrows.png');
+    height: 14px;
+    left: -13px;
+    position: absolute;
+    top: 120px;
+    width: 45px;
+}
