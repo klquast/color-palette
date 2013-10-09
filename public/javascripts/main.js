@@ -33,22 +33,23 @@ $(function(){
         $('.brightness').html(brightness);
         $('.pixel-offset').html(((e.pageX - posX) - 8)+ ' , ' + ((e.pageY - posY) - 8.5));
 
-        if ($(this).attr('id') == $(event.target).attr('id')) {
-        }
         $circle.triggerHandler(e);
     });
 
-    $('body').on('click', '.hue-slider-backdrop', function(e){
-        var posY = $(this).offset().top;
+    $('body').on('mousedown', '.hue-slider-backdrop', function(e){
+        var posY = $(this).offset().top,
+            $arrows = $('.selected-hue-arrows');
         if(e.pageY < posY || e.pageY > (posY + 256)) {
             return false;
         }
-        $('.selected-hue-arrows').css({
+        $arrows.css({
             top: (e.pageY - posY) - 8.5
         });
         var hue = calcHue();
         $('.hue').html(hue);
         $('.pixel-offset').html((e.pageY - posY) - 8.5);
+
+        $arrows.triggerHandler(e);
     });
 
     $('.selected-hue-arrows').draggable({
