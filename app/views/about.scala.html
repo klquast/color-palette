@@ -10,60 +10,9 @@
 @scripts = {
     <script type="text/javascript">
         $(function(){
-            alert(hsvToRgb(280, 75, 82));
-            alert(rgbToHsv(157, 52, 209));
+            alert(convert.hsvToRgb(280, 75, 82));
+            alert(convert.rgbToHsv(157, 52, 209));
         });
-
-        function hsvToRgb(hue, sat, value){
-            var r, g, b;
-            hue /= 360;
-            sat /= 100;
-            value /= 100;
-
-            var i = Math.floor(hue * 6);
-            var f = hue * 6 - i;
-            var p = value * (1 - sat);
-            var q = value * (1 - f * sat);
-            var t = value * (1 - (1 - f) * sat);
-
-            switch (i % 6) {
-                case 0: r = value, g = t, b = p; break;
-                case 1: r = q, g = value, b = p; break;
-                case 2: r = p, g = value, b = t; break;
-                case 3: r = p, g = q, b = value; break;
-                case 4: r = t, g = p, b = value; break;
-                case 5: r = value, g = p, b = q; break;
-            }
-
-            r = Math.round(r * 255);
-            g = Math.round(g * 255);
-            b = Math.round(b * 255);
-
-            return [r, g, b];
-        }
-
-        function rgbToHsv(red, green, blue) {
-            var h, s, v;
-
-            red /= 255;
-            green /= 255;
-            blue /= 255;
-
-            var maxRgb = Math.max(red, green, blue);
-            var minRgb = Math.min(red, green, blue);
-
-            if(minRgb == maxRgb) {
-                return [0, 0, minRbg];
-            }
-
-            var d = (red == minRgb) ? green - blue : ((blue == minRgb) ? red - green : blue - red);
-            var hd = (red == minRgb) ? 3 : ((blue == minRgb) ? 1 : 5);
-            h = 60 * (hd - d / (maxRgb - minRgb));
-            s = (maxRgb - minRgb) / maxRgb;
-            v = maxRgb;
-
-            return [Math.round(h), Math.round(s*100), Math.round(v*100)];
-        }
     </script>
 }
 
