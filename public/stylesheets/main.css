@@ -56,3 +56,20 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     right: 10px;
     top: 5px;
 }
+
+/* Color Picker */
+.color-picker {
+    background: #00FFFF;
+    height: 256px;
+    position: relative;
+    width: 256px;
+}
+
+.selected-color-circle {
+    background-image: url('../images/selected-color-circle.png');
+    height: 16px;
+    left: 120px;
+    position: absolute;
+    top: 120px;
+    width: 16px;
+}

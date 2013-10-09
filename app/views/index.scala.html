@@ -4,5 +4,11 @@
 
     <h1>Color Palette</h1>
     <h3>Add Color</h3>
+    <div class="add-color">
+        <div class="color-picker" ondragover="event.preventDefault()">
+            <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
+            <div class="selected-color-circle" draggable="true"></div>
+        </div>
+    </div>
     <h3>Saved Colors</h3>
 }
