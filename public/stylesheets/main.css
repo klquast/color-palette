@@ -59,9 +59,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 /* Color Picker */
 .color-picker {
+    height: 272px;
+    position: relative;
+    width: 272px;
+}
+
+.color-picker-backdrop {
     background: #00FFFF;
     height: 256px;
+    margin: auto;
     position: relative;
+    top: 8px;
     width: 256px;
 }
 

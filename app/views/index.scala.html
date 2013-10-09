@@ -5,9 +5,16 @@
     <h1>Color Palette</h1>
     <h3>Add Color</h3>
     <div class="add-color">
-        <div class="color-picker" ondragover="event.preventDefault()">
-            <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
-            <div class="selected-color-circle" draggable="true"></div>
+        <div class="color-picker">
+            <div class="color-picker-backdrop">
+                <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
+                <div class="selected-color-circle"></div>
+            </div>
+        </div>
+        <div class="color-attributes">
+            Hue: <span class="hue">180</span>
+            Saturation: <span class="saturation">50</span>
+            Brightness: <span class="brightness">50</span>
         </div>
     </div>
     <h3>Saved Colors</h3>
