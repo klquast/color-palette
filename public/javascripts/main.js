@@ -7,7 +7,8 @@ $(function(){
     $('.selected-color-circle').draggable({
         containment: ".color-picker",
         scroll: false,
-        drag: function() {
+        drag: function(e) {
+            var saturation = calcSaturation();
             var saturation = calcSaturation();
             var brightness = calcBrightness();
             $('.saturation').html(saturation);
@@ -15,13 +16,14 @@ $(function(){
         }
     });
 
-    $('body').on('click', '.color-picker-backdrop', function(e){
+    $('body').on('mousedown', '.color-picker-backdrop', function(e){
         var posX = $(this).offset().left,
-            posY = $(this).offset().top;
+            posY = $(this).offset().top,
+            $circle = $('.selected-color-circle');
         if(e.pageY < posY || e.pageY > (posY + 256) || e.pageX < posX || e.pageX > (posX + 256)) {
             return false;
         }
-        $('.selected-color-circle').css({
+        $circle.css({
             top: (e.pageY - posY) - 8.5,
             left: (e.pageX - posX) - 8
         });
@@ -30,6 +32,10 @@ $(function(){
         $('.saturation').html(saturation);
         $('.brightness').html(brightness);
         $('.pixel-offset').html(((e.pageX - posX) - 8)+ ' , ' + ((e.pageY - posY) - 8.5));
+
+        if ($(this).attr('id') == $(event.target).attr('id')) {
+        }
+        $circle.triggerHandler(e);
     });
 
     $('body').on('click', '.hue-slider-backdrop', function(e){
