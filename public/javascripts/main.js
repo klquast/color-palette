@@ -9,11 +9,12 @@ $(function(){
         containment: ".color-picker",
         scroll: false,
         drag: function(e) {
+            var hue = colors.hue();
             var saturation = colors.saturation();
             var brightness = colors.brightness();
             $('#saturation-input').val(saturation);
             $('#brightness-input').val(brightness);
-            var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
+            var rgb = convert.hsvToRgb(hue, saturation, brightness);
             convert.rgbToHex(rgb);
         }
     });
@@ -25,8 +26,11 @@ $(function(){
         scroll: false,
         drag: function() {
             var hue = colors.hue();
-            var rgb = convert.hsvToRgb(hue, 100, 100);
-            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+            var saturation = colors.saturation();
+            var brightness = colors.brightness();
+            var rgbBackGround = convert.hsvToRgb(hue, 100, 100);
+            var rgb = convert.hsvToRgb(hue, saturation, brightness)
+            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackGround + ')');
             convert.rgbToHex(rgb);
             $('#hue-input').val(hue);
         }
@@ -65,10 +69,13 @@ $(function(){
             top: (e.pageY - posY) - 8.5
         });
         var hue = colors.hue();
+        var saturation = colors.saturation();
+        var brightness = colors.brightness();
 
         $('#hue-input').val(hue);
-        var rgb = convert.hsvToRgb(hue, 100, 100);
-        $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+        var rgbBackground = convert.hsvToRgb(hue, 100, 100);
+        var rgb = convert.hsvToRgb(hue, saturation, brightness);
+        $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackground + ')');
         convert.rgbToHex(rgb);
 
         $arrows.triggerHandler(e);
