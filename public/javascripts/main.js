@@ -10,8 +10,9 @@ $(function(){
         drag: function(e) {
             var saturation = colors.saturation();
             var brightness = colors.brightness();
-            $('.saturation').html(saturation);
-            $('.brightness').html(brightness);
+            $('#saturation-input').val(saturation);
+            $('#brightness-input').val(brightness);
+            var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
         }
     });
 
@@ -24,7 +25,7 @@ $(function(){
             var hue = colors.hue();
             var rgb = convert.hsvToRgb(hue, 100, 100);
             $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
-            $('.hue').html(hue);
+            $('#hue-input').val(hue);
         }
     });
 
@@ -42,8 +43,9 @@ $(function(){
         });
         var saturation = colors.saturation();
         var brightness = colors.brightness();
-        $('.saturation').html(saturation);
-        $('.brightness').html(brightness);
+        $('#saturation-input').val(saturation);
+        $('#brightness-input').val(brightness);
+        var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
 
         $circle.triggerHandler(e);
     });
@@ -60,9 +62,10 @@ $(function(){
         });
         var hue = colors.hue();
 
-        $('.hue').html(hue);
+        $('#hue-input').val(hue);
         var rgb = convert.hsvToRgb(hue, 100, 100);
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+
         $arrows.triggerHandler(e);
     });
 });
@@ -115,6 +118,8 @@ var convert = {
         g = Math.round(g * 255);
         b = Math.round(b * 255);
 
+        colorInput.updateRgb([r,g,b]);
+
         return [r, g, b];
     },
     rgbToHsv: function(red, green, blue){
@@ -140,3 +145,11 @@ var convert = {
         return [Math.round(h), Math.round(s*100), Math.round(v*100)];
     }
 };
+
+var colorInput = {
+    updateRgb: function(rgb) {
+        $('#red-input').val(rgb[0]);
+        $('#green-input').val(rgb[1]);
+        $('#blue-input').val(rgb[2]);
+    }
+}

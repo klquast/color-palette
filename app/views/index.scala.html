@@ -5,14 +5,13 @@
     <h3>Add A Color</h3>
     <div class="add-color">
         <div class="row">
-            <div class="col-md-1 col-sm-1 col-xs-2">
+            <div class="col-md-1 col-sm-1 col-xs-1">
                 <div class="hue-slider">
                     <div class="hue-slider-backdrop">
                         <img src="@routes.Assets.at("images/hue-slider.png")" alt="Hue Slider">
                         <div class="selected-hue-arrows"></div>
                     </div>
                 </div>
-                <!--<input class="form-control input-sm" type="text" placeholder="Hue">-->
             </div>
             <div class="col-md-3 col-sm-3 col-xs-3">
                 <div class="color-picker">
@@ -22,12 +21,39 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="color-attributes">
-            Hue: <span class="hue">180</span>
-            Saturation: <span class="saturation">50</span>
-            Brightness: <span class="brightness">50</span>
-            <br>
+            <div class="col-md-3 color-attributes-short">
+                <h4>Color Attributes</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="hue-input">Hue</label>
+                            <input class="form-control input-sm" id="hue-input" type="text" placeholder="Hue" value="180" maxlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="saturation-input">Saturation</label>
+                            <input class="form-control input-sm" id="saturation-input" type="text" placeholder="Sat" value="50" maxlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="brightness-input">Brightness</label>
+                            <input class="form-control input-sm" id="brightness-input" type="text" placeholder="Bri" value="50" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label" for="red-input">Red</label>
+                            <input class="form-control input-sm" id="red-input" type="text" placeholder="Red" value="0" maxlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="green-input">Green</label>
+                            <input class="form-control input-sm" id="green-input" type="text" placeholder="Green" value="255" maxlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="blue-input">Blue</label>
+                            <input class="form-control input-sm" id="blue-input" type="text" placeholder="Blue" value="255" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <h3>Saved Colors</h3>
