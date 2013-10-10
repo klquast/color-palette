@@ -2,23 +2,23 @@
 
 @main("Home") {
 
-    <h1>Color Palette</h1>
-    <h3>Add Color</h3>
+    <h3>Add A Color</h3>
     <div class="add-color">
         <div class="row">
-            <div class="col-md-3">
-                <div class="color-picker">
-                    <div class="color-picker-backdrop">
-                        <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
-                        <div class="selected-color-circle"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-sm-1 col-xs-2">
                 <div class="hue-slider">
                     <div class="hue-slider-backdrop">
                         <img src="@routes.Assets.at("images/hue-slider.png")" alt="Hue Slider">
                         <div class="selected-hue-arrows"></div>
+                    </div>
+                </div>
+                <!--<input class="form-control input-sm" type="text" placeholder="Hue">-->
+            </div>
+            <div class="col-md-3 col-sm-3 col-xs-3">
+                <div class="color-picker">
+                    <div class="color-picker-backdrop">
+                        <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
+                        <div class="selected-color-circle"></div>
                     </div>
                 </div>
             </div>

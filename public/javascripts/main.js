@@ -23,7 +23,7 @@ $(function(){
         drag: function() {
             var hue = colors.hue();
             var rgb = convert.hsvToRgb(hue, 100, 100);
-            $('.color-picker-backdrop').css('background', 'rgb(' + rgb + ')');
+            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
             $('.hue').html(hue);
         }
     });
@@ -62,7 +62,7 @@ $(function(){
 
         $('.hue').html(hue);
         var rgb = convert.hsvToRgb(hue, 100, 100);
-        $('.color-picker-backdrop').css('background', 'rgb(' + rgb + ')');
+        $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
         $arrows.triggerHandler(e);
     });
 });
