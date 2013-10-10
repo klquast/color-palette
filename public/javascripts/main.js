@@ -1,4 +1,7 @@
 $(function(){
+    $('.show-popover').popover();
+
+    /* Background Color Toggle*/
     $('.toggle-bg-color').click(function(){
         $('body').toggleClass('dark');
     });
@@ -67,6 +70,22 @@ $(function(){
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
 
         $arrows.triggerHandler(e);
+    });
+
+    /* Color Attribute Input Boxes*/
+    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').change(function(){
+        colorInput.checkForValue($(this));
+    });
+    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').blur(function(){
+        colorInput.checkForValue($(this));
+    });
+    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').keyup(function(e){
+        var character = e.which;
+        if(character === 38 || character === 40) {
+            colorInput.incDecValue($(this), character);
+        }
+
+        colorInput.updateSliders($(this));
     });
 });
 
@@ -151,5 +170,54 @@ var colorInput = {
         $('#red-input').val(rgb[0]);
         $('#green-input').val(rgb[1]);
         $('#blue-input').val(rgb[2]);
+    },
+    updateSliders: function($inputBox) {
+        //TODO: convert rgb to hsv and update the position of the sliders
+        var maxValue = parseInt($inputBox.attr('data-max-value'));
+        var currentValue = parseInt($inputBox.val());
+        var $parent = $inputBox.parent('.form-group');
+
+        if(currentValue > maxValue) {
+            $parent.addClass('has-warning').attr('title', 'Warning: Value cannot be greater than ' + maxValue);
+        }
+        else if(currentValue < 0) {
+            $parent.addClass('has-warning').attr('title', 'Warning: Value cannot be less than 0');
+        }
+        else {
+            $parent.removeClass('has-warning').attr('title', '');
+        }
+    },
+    checkForValue: function($inputBox) {
+        var maxValue = parseInt($inputBox.attr('data-max-value'));
+        var currentValue = parseInt($inputBox.val());
+        var $parent = $inputBox.parent('.form-group');
+        $parent.removeClass('has-warning').attr('title', '');
+
+
+        if($inputBox.val() === undefined || $inputBox.val() === '') {
+            $inputBox.val(0);
+        }
+        if(currentValue > maxValue) {
+            $inputBox.val(maxValue);
+        }
+        if(currentValue < 0) {
+            $inputBox.val(0);
+        }
+    },
+    incDecValue: function($inputBox, character) {
+        var maxValue = $inputBox.attr('data-max-value');
+        var currentValue = parseInt($inputBox.val());
+        var canIncrease = currentValue >= maxValue ? false : true;
+        var canDecrease = currentValue == 0 ? false : true;
+
+        if(character === 38 && canIncrease) {
+            $inputBox.val(currentValue + 1);
+            return;
+        }
+        if(character === 40 && canDecrease){
+            $inputBox.val(currentValue - 1);
+            return;
+        }
+        return;
     }
 }
