@@ -1,6 +1,4 @@
 $(function(){
-    $('.show-popover').popover();
-
     /* Background Color Toggle*/
     $('.toggle-bg-color').click(function(){
         $('body').toggleClass('dark');
@@ -178,21 +176,24 @@ var colorInput = {
         var $parent = $inputBox.parent('.form-group');
 
         if(currentValue > maxValue) {
-            $parent.addClass('has-warning').attr('title', 'Warning: Value cannot be greater than ' + maxValue);
+            $parent.addClass('has-warning');
+            message.showWarning('Warning', 'Value cannot be greater than ' + maxValue);
         }
-        else if(currentValue < 0) {
-            $parent.addClass('has-warning').attr('title', 'Warning: Value cannot be less than 0');
+        else if(currentValue < 0){
+            $parent.addClass('has-warning');
+            message.showWarning('Warning', 'Value cannot be less than 0');
         }
         else {
-            $parent.removeClass('has-warning').attr('title', '');
+            $parent.removeClass('has-warning');
+            message.hideAlert();
         }
     },
     checkForValue: function($inputBox) {
         var maxValue = parseInt($inputBox.attr('data-max-value'));
         var currentValue = parseInt($inputBox.val());
         var $parent = $inputBox.parent('.form-group');
-        $parent.removeClass('has-warning').attr('title', '');
-
+        $parent.removeClass('has-warning');
+        message.hideAlert();
 
         if($inputBox.val() === undefined || $inputBox.val() === '') {
             $inputBox.val(0);
@@ -219,5 +220,21 @@ var colorInput = {
             return;
         }
         return;
+    }
+}
+
+var message = {
+    baseHtml: function(title, content) {
+        return '<div class="alert alert-dismissable"><button type="button" class="close" data-dismiss="alert">×</button><h4>' + title + '</h4><p>' + content + '</p></div>';
+    },
+    showWarning: function(title, content) {
+        var $baseHtml = $(this.baseHtml(title, content));
+        $baseHtml.addClass('alert-warning');
+        $('.alert-container').html($baseHtml).fadeIn();
+    },
+    hideAlert: function(title, content) {
+        $('.alert-container').fadeOut('slow', function(){
+            $(this).html('');
+        });
     }
 }

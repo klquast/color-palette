@@ -13,7 +13,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-3">
+            <div class="col-md-3 col-sm-11 col-xs-10" style="min-width: 290px;">
                 <div class="color-picker">
                     <div class="color-picker-backdrop">
                         <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
@@ -21,11 +21,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 color-attributes-short">
+            <div class="col-md-3 col-md-3 col-sm-12 col-xs-12 color-attributes-short">
                 <h4>Color Attributes</h4>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group show-popover" data-content="test" data-trigger="hover" data-toggle="popover" data-placement="right">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
                             <label class="control-label" for="hue-input">Hue</label>
                             <input class="form-control input-sm" id="hue-input" type="text" placeholder="Hue" value="180" maxlength="3" data-max-value="360">
                         </div>
@@ -38,7 +38,7 @@
                             <input class="form-control input-sm" id="brightness-input" type="text" placeholder="Bri" value="50" maxlength="3" data-max-value="100">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <label class="control-label" for="red-input">Red</label>
                             <input class="form-control input-sm" id="red-input" type="text" placeholder="Red" value="0" maxlength="3" data-max-value="255">
@@ -52,6 +52,14 @@
                             <input class="form-control input-sm" id="blue-input" type="text" placeholder="Blue" value="255" maxlength="3" data-max-value="255">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h4>Color Preview</h4>
+                <div class="color-preview-tile"></div>
+                <div class="form-group">
+                    <label class="control-label" for="hex-input">#</label>
+                    <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" value="00FFFF" maxlength="7">
                 </div>
             </div>
         </div>
