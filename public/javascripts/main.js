@@ -89,6 +89,17 @@ $(function(){
 
         colorInput.updateSliders($(this));
     });
+
+    /* Hex Input Box */
+    $('#hex-input').change(function(){
+        colorInput.checkForHexValue($(this));
+    });
+    $('#hex-input').blur(function(){
+        colorInput.checkForHexValue($(this));
+    });
+    $('#hex-input').keyup(function(){
+        colorInput.validateHexValue($(this).val());
+    });
 });
 
 /***************
@@ -264,6 +275,15 @@ var colorInput = {
         if(currentValue < 0) {
             $inputBox.val(0);
         }
+    },
+    checkForHexValue: function($inputBox) {
+        if($inputBox.val() === undefined || $inputBox.val() === '') {
+            var rgb = [$('#red-input').val(), $('#green-input').val(), $('#blue-input').val()];
+            convert.rgbToHex(rgb);
+        }
+    },
+    validateHexValue: function(hexValue) {
+
     },
     incDecValue: function($inputBox, character) {
         var maxValue = $inputBox.attr('data-max-value');
