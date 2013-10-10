@@ -14,6 +14,7 @@ $(function(){
             $('#saturation-input').val(saturation);
             $('#brightness-input').val(brightness);
             var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
+            convert.rgbToHex(rgb);
         }
     });
 
@@ -26,6 +27,7 @@ $(function(){
             var hue = colors.hue();
             var rgb = convert.hsvToRgb(hue, 100, 100);
             $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+            convert.rgbToHex(rgb);
             $('#hue-input').val(hue);
         }
     });
@@ -47,6 +49,7 @@ $(function(){
         $('#saturation-input').val(saturation);
         $('#brightness-input').val(brightness);
         var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
+        convert.rgbToHex(rgb);
 
         $circle.triggerHandler(e);
     });
@@ -66,6 +69,7 @@ $(function(){
         $('#hue-input').val(hue);
         var rgb = convert.hsvToRgb(hue, 100, 100);
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+        convert.rgbToHex(rgb);
 
         $arrows.triggerHandler(e);
     });
@@ -160,6 +164,58 @@ var convert = {
         v = maxRgb;
 
         return [Math.round(h), Math.round(s*100), Math.round(v*100)];
+    },
+    rgbToHex: function(rgb) {
+        var red = rgb[0],
+            green = rgb[1],
+            blue = rgb[2],
+            r1, r2, g1, g2, b1, b2,
+            hex;
+
+        r1 = Math.floor(red / 16);
+        r2 = red % 16;
+        g1 = Math.floor(green / 16);
+        g2 = green % 16;
+        b1 = Math.floor(blue / 16);
+        b2 = blue % 16;
+
+        hex = translate(r1).toString() + translate(r2).toString() +
+              translate(g1).toString() + translate(g2).toString() +
+              translate(b1).toString() + translate(b2).toString();
+
+        colorInput.updateHex(hex);
+
+        return hex;
+
+        function translate(value) {
+            if(value < 10){
+                return value;
+            }
+
+            var newValue;
+            switch (value){
+                case 10:
+                    newValue = 'A';
+                    break;
+                case 11:
+                    newValue = 'B';
+                    break;
+                case 12:
+                    newValue = 'C';
+                    break;
+                case 13:
+                    newValue = 'D';
+                    break;
+                case 14:
+                    newValue = 'E';
+                    break;
+                case 15:
+                    newValue = 'F';
+                    break;
+            }
+
+            return newValue;
+        }
     }
 };
 
@@ -168,6 +224,10 @@ var colorInput = {
         $('#red-input').val(rgb[0]);
         $('#green-input').val(rgb[1]);
         $('#blue-input').val(rgb[2]);
+    },
+    updateHex: function(hex) {
+        $('#hex-input').val(hex);
+        $('.color-preview-tile').css('background-color', '#' + hex);
     },
     updateSliders: function($inputBox) {
         //TODO: convert rgb to hsv and update the position of the sliders
