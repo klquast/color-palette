@@ -66,10 +66,10 @@ h3 {
 /* Alerts */
 .alert-container {
     display: none;
-    opacity: .9;
     position: absolute;
     right: 5px;
     width: 250px;
+    z-index: 5;
 }
 
 /* Color Picker */

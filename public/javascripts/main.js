@@ -104,8 +104,40 @@ $(function(){
     $('#hex-input').blur(function(){
         colorInput.checkForHexValue($(this));
     });
-    $('#hex-input').keyup(function(){
-        colorInput.validateHexValue($(this).val());
+    $('#hex-input').keyup(function(e){
+        var hexValue = $(this).val();
+        var allowedChars = /[^0-9a-fA-F#]/;
+        var hideAlert = true;
+        var ignoreFirstChar = hexValue.substr(0,1) !== '#';
+
+        if(allowedChars.test(hexValue)) {
+            message.showWarning("Warning", "Hex contains an invalid character. Legal characters include 0-9 and A-F.");
+            hideAlert = false;
+        }
+        else if(hexValue.length === 3 && ignoreFirstChar) {
+            // update color
+            alert('update color to ' + hexValue);
+        }
+        else if(hexValue.length === 4 && !ignoreFirstChar) {
+            // strip # and update color
+            alert('update color to ' + hexValue.substr(1,3));
+        }
+        else if(hexValue.length === 6 && ignoreFirstChar) {
+            // update color
+            alert('update color to ' + hexValue);
+        }
+        else if(hexValue.length > 6 && ignoreFirstChar) {
+            message.showWarning("Warning", "Hex value cannot contain more than 6 characters");
+            hideAlert = false;
+        }
+        else if(hexValue.length === 7 && !ignoreFirstChar) {
+            // strip # and update color
+            alert('update color to ' + hexValue.substr(1,6));
+        }
+
+        if(hideAlert) {
+            message.hideAlert();
+        }
     });
 });
 
@@ -284,13 +316,28 @@ var colorInput = {
         }
     },
     checkForHexValue: function($inputBox) {
-        if($inputBox.val() === undefined || $inputBox.val() === '') {
+        var hexValue = $inputBox.val();
+        var resetValue = false;
+
+        if(hexValue === undefined || hexValue === '') {
+            resetValue = true;
+        }
+        if(hexValue.length == 7) {
+            if(hexValue.substr(0,1) === '#') {
+                $('#hex-input').val(hexValue.substr(1));
+            }
+            else {
+                $('#hex-input').val(hexValue.substr(0, 6));
+            }
+        }
+        if(hexValue.length != 3 && hexValue.length != 6) {
+            resetValue = true;
+        }
+
+        if(resetValue) {
             var rgb = [$('#red-input').val(), $('#green-input').val(), $('#blue-input').val()];
             convert.rgbToHex(rgb);
         }
-    },
-    validateHexValue: function(hexValue) {
-
     },
     incDecValue: function($inputBox, character) {
         var maxValue = $inputBox.attr('data-max-value');
@@ -319,7 +366,7 @@ var message = {
         $baseHtml.addClass('alert-warning');
         $('.alert-container').html($baseHtml).fadeIn();
     },
-    hideAlert: function(title, content) {
+    hideAlert: function() {
         $('.alert-container').fadeOut('slow', function(){
             $(this).html('');
         });
