@@ -238,10 +238,6 @@ var convert = {
         return hex;
 
         function translate(value) {
-            if(value < 10){
-                return value;
-            }
-
             var newValue;
             switch (value){
                 case 10:
@@ -261,6 +257,65 @@ var convert = {
                     break;
                 case 15:
                     newValue = 'F';
+                    break;
+                default:
+                    newValue = value;
+                    break;
+            }
+
+            return newValue;
+        }
+    },
+    hexToRgb(hex){
+        var pos1, pos2, pos3, pos4, pos5, pos6,
+            r, g, b;
+
+        pos1 = hex.substr(0,1);
+        pos2 = hex.substr(1,1);
+        pos3 = hex.substr(2,1);
+
+        if(hex.length === 3) {
+            var x, y, z;
+            pos4 = pos1
+            pos5 = pos2
+            pos6 = pos3
+        }
+        else {
+            pos4 = hex.substr(3,1);
+            pos5 = hex.substr(4,1);
+            pos6 = hex.substr(5,1);
+        }
+
+        r = translate(pos1) * 16 + translate(pos2);
+        g = translate(pos3) * 16 + translate(pos4);
+        b = translate(pos5) * 16 + translate(pos6);
+
+        colorInput.updateRgb([r,g,b]);
+        return [r,g,b];
+
+        function translate(value) {
+            var newValue;
+            switch (value.toUpperCase()){
+                case 'A':
+                    newValue = 10;
+                    break;
+                case 'B':
+                    newValue = 11;
+                    break;
+                case 'C':
+                    newValue = 12;
+                    break;
+                case 'D':
+                    newValue = 13;
+                    break;
+                case 'E':
+                    newValue = 14;
+                    break;
+                case 'F':
+                    newValue = 15;
+                    break;
+                default:
+                    newValue = parseInt(value);
                     break;
             }
 
