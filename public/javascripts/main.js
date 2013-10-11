@@ -158,6 +158,7 @@ $(function(){
         var hexValue = $(this).val();
         var allowedChars = /[^0-9a-fA-F#]/;
         var hideAlert = true;
+        var updateColor = false;
         var ignoreFirstChar = hexValue.substr(0,1) !== '#';
 
         if(allowedChars.test(hexValue)) {
@@ -165,24 +166,29 @@ $(function(){
             hideAlert = false;
         }
         else if(hexValue.length === 3 && ignoreFirstChar) {
-            // update color
-            alert('update color to ' + hexValue);
+            updateColor = true;
         }
         else if(hexValue.length === 4 && !ignoreFirstChar) {
-            // strip # and update color
-            alert('update color to ' + hexValue.substr(1,3));
+            hexValue = hexValue.substr(1,3);
+            updateColor = true;
         }
         else if(hexValue.length === 6 && ignoreFirstChar) {
-            // update color
-            alert('update color to ' + hexValue);
+            updateColor = true;
+        }
+        else if(hexValue.length === 7 && !ignoreFirstChar) {
+            hexValue = hexValue.substr(1,6);
+            updateColor = true;
         }
         else if(hexValue.length > 6 && ignoreFirstChar) {
             message.showWarning("Warning", "Hex value cannot contain more than 6 characters");
             hideAlert = false;
         }
-        else if(hexValue.length === 7 && !ignoreFirstChar) {
-            // strip # and update color
-            alert('update color to ' + hexValue.substr(1,6));
+
+        if(updateColor) {
+            var rgb = convert.hexToRgb(hexValue);
+            colorInput.updateRgb(rgb);
+            var hsv = convert.rgbToHsv(rgb[0], rgb[1], rgb[2]);
+            colorInput.updateHsv(hsv);
         }
 
         if(hideAlert) {
