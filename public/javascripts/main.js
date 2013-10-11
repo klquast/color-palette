@@ -12,10 +12,14 @@ $(function(){
             var hue = colors.hue();
             var saturation = colors.saturation();
             var brightness = colors.brightness();
+
             $('#saturation-input').val(saturation);
             $('#brightness-input').val(brightness);
+
             var rgb = convert.hsvToRgb(hue, saturation, brightness);
-            convert.rgbToHex(rgb);
+            var hex = convert.rgbToHex(rgb);
+            colorInput.updateRgb(rgb);
+            colorInput.updateHex(hex);
         }
     });
 
@@ -28,11 +32,16 @@ $(function(){
             var hue = colors.hue();
             var saturation = colors.saturation();
             var brightness = colors.brightness();
-            var rgbBackGround = convert.hsvToRgb(hue, 100, 100);
-            var rgb = convert.hsvToRgb(hue, saturation, brightness)
-            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackGround + ')');
-            convert.rgbToHex(rgb);
+
             $('#hue-input').val(hue);
+
+            var rgbBackGround = convert.hsvToRgb(hue, 100, 100);
+            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackGround + ')');
+
+            var rgb = convert.hsvToRgb(hue, saturation, brightness)
+            var hex = convert.rgbToHex(rgb);
+            colorInput.updateRgb(rgb);
+            colorInput.updateHex(hex);
         }
     });
 
@@ -50,10 +59,14 @@ $(function(){
         });
         var saturation = colors.saturation();
         var brightness = colors.brightness();
+
         $('#saturation-input').val(saturation);
         $('#brightness-input').val(brightness);
+
         var rgb = convert.hsvToRgb($('#hue-input').val(), saturation, brightness);
-        convert.rgbToHex(rgb);
+        var hex = convert.rgbToHex(rgb);
+        colorInput.updateRgb(rgb);
+        colorInput.updateHex(hex);
 
         $circle.triggerHandler(e);
     });
@@ -74,29 +87,66 @@ $(function(){
 
         $('#hue-input').val(hue);
         var rgbBackground = convert.hsvToRgb(hue, 100, 100);
-        var rgb = convert.hsvToRgb(hue, saturation, brightness);
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackground + ')');
-        convert.rgbToHex(rgb);
+
+        var rgb = convert.hsvToRgb(hue, saturation, brightness);
+        var hex = convert.rgbToHex(rgb);
+        colorInput.updateRgb(rgb);
+        colorInput.updateHex(hex);
 
         $arrows.triggerHandler(e);
     });
 
     /* Color Attribute Input Boxes*/
-    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').change(function(){
-        colorInput.checkForValue($(this));
-    });
-    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').blur(function(){
-        colorInput.checkForValue($(this));
-    });
-    $('#hue-input, #saturation-input, #brightness-input, #red-input, #green-input, #blue-input').keyup(function(e){
-        var character = e.which;
-        if(character === 38 || character === 40) {
-            colorInput.incDecValue($(this), character);
+    $('#hue-input, #saturation-input, #brightness-input').change(function(){
+        var valid = colorInput.checkForValue($(this));
+
+        if(!valid) {
+            var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
+            colorInput.updateHsv(hsv);
         }
-
-        colorInput.updateSliders($(this));
     });
+    $('#red-input, #green-input, #blue-input').change(function(){
+        var valid = colorInput.checkForValue($(this));
 
+        if(!valid) {
+            var rgb = convert.hexToRgb(colors.hex());
+            colorInput.updateRgb(rgb);
+        }
+    });
+    $('#hue-input, #saturation-input, #brightness-input').blur(function(){
+        var valid = colorInput.checkForValue($(this));
+
+        if(!valid) {
+            var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
+            colorInput.updateHsv(hsv);
+        }
+    });
+    $('#red-input, #green-input, #blue-input').blur(function(){
+        var valid = colorInput.checkForValue($(this));
+
+        if(!valid) {
+            var rgb = convert.hexToRgb(colors.hex());
+            colorInput.updateRgb(rgb);
+        }
+    });
+    $('#hue-input, #saturation-input, #brightness-input').keyup(function(e){
+        var valid = colorInput.validateRgbOrHsv($(this), e);
+
+        if(valid) {
+            // update everything but the hsv inputs
+        }
+    });
+    $('#red-input, #green-input, #blue-input').keyup(function(e){
+        var valid = colorInput.validateRgbOrHsv($(this), e);
+
+        if(valid) {
+            // update everything but the rgb inputs
+        }
+        else {
+            // reset the text box
+        }
+    });
     /* Hex Input Box */
     $('#hex-input').change(function(){
         colorInput.checkForHexValue($(this));
@@ -160,6 +210,18 @@ var colors = {
         var pos = $('.selected-color-circle').css('top');
         pos = parseInt(pos);
         return Math.round(100 - (pos + 8) / 2.56);
+    },
+    red: function(){
+        return parseInt($('#red-input').val());
+    },
+    green: function(){
+        return parseInt($('#green-input').val());
+    },
+    blue: function(){
+        return parseInt($('#blue-input').val());
+    },
+    hex: function() {
+        return $('#hex-input').val();
     }
 };
 
@@ -189,7 +251,7 @@ var convert = {
         g = Math.round(g * 255);
         b = Math.round(b * 255);
 
-        colorInput.updateRgb([r,g,b]);
+//        colorInput.updateRgb([r,g,b]);
 
         return [r, g, b];
     },
@@ -233,7 +295,7 @@ var convert = {
               translate(g1).toString() + translate(g2).toString() +
               translate(b1).toString() + translate(b2).toString();
 
-        colorInput.updateHex(hex);
+//        colorInput.updateHex(hex);
 
         return hex;
 
@@ -266,7 +328,7 @@ var convert = {
             return newValue;
         }
     },
-    hexToRgb(hex){
+    hexToRgb: function(hex){
         var pos1, pos2, pos3, pos4, pos5, pos6,
             r, g, b;
 
@@ -290,7 +352,7 @@ var convert = {
         g = translate(pos3) * 16 + translate(pos4);
         b = translate(pos5) * 16 + translate(pos6);
 
-        colorInput.updateRgb([r,g,b]);
+//        colorInput.updateRgb([r,g,b]);
         return [r,g,b];
 
         function translate(value) {
@@ -334,24 +396,13 @@ var colorInput = {
         $('#hex-input').val(hex);
         $('.color-preview-tile').css('background-color', '#' + hex);
     },
+    updateHsv: function(hsv){
+        $('#hue-input').val(hsv[0]);
+        $('#saturation-input').val(hsv[1]);
+        $('#brightness-input').val(hsv[2]);
+    },
     updateSliders: function($inputBox) {
         //TODO: convert rgb to hsv and update the position of the sliders
-        var maxValue = parseInt($inputBox.attr('data-max-value'));
-        var currentValue = parseInt($inputBox.val());
-        var $parent = $inputBox.parent('.form-group');
-
-        if(currentValue > maxValue) {
-            $parent.addClass('has-warning');
-            message.showWarning('Warning', 'Value cannot be greater than ' + maxValue);
-        }
-        else if(currentValue < 0){
-            $parent.addClass('has-warning');
-            message.showWarning('Warning', 'Value cannot be less than 0');
-        }
-        else {
-            $parent.removeClass('has-warning');
-            message.hideAlert();
-        }
     },
     checkForValue: function($inputBox) {
         var maxValue = parseInt($inputBox.attr('data-max-value'));
@@ -361,14 +412,16 @@ var colorInput = {
         message.hideAlert();
 
         if($inputBox.val() === undefined || $inputBox.val() === '') {
-            $inputBox.val(0);
+            return false;
         }
         if(currentValue > maxValue) {
-            $inputBox.val(maxValue);
+            return false;
         }
         if(currentValue < 0) {
-            $inputBox.val(0);
+            return false;
         }
+
+        return true;
     },
     checkForHexValue: function($inputBox) {
         var hexValue = $inputBox.val();
@@ -391,24 +444,55 @@ var colorInput = {
 
         if(resetValue) {
             var rgb = [$('#red-input').val(), $('#green-input').val(), $('#blue-input').val()];
-            convert.rgbToHex(rgb);
+            var hex = convert.rgbToHex(rgb);
+            colorInput.updateHex(hex);
         }
+    },
+    validateRgbOrHsv: function($inputBox, e){
+        var valid = true;
+
+        var character = e.which;
+        if(character === 38 || character === 40) {
+            valid = this.incDecValue($inputBox, character);
+        }
+
+        var maxValue = parseInt($inputBox.attr('data-max-value'));
+        var currentValue = parseInt($inputBox.val());
+        var $parent = $inputBox.parent('.form-group');
+
+        if(currentValue > maxValue) {
+            $parent.addClass('has-warning');
+            message.showWarning('Warning', 'Value cannot be greater than ' + maxValue);
+            valid = false;
+        }
+        else if(currentValue < 0){
+            $parent.addClass('has-warning');
+            message.showWarning('Warning', 'Value cannot be less than 0');
+            valid = false;
+        }
+        else {
+            $parent.removeClass('has-warning');
+            message.hideAlert();
+        }
+
+        return valid;
     },
     incDecValue: function($inputBox, character) {
         var maxValue = $inputBox.attr('data-max-value');
         var currentValue = parseInt($inputBox.val());
         var canIncrease = currentValue >= maxValue ? false : true;
         var canDecrease = currentValue == 0 ? false : true;
+        var valueUpdated = false;
 
         if(character === 38 && canIncrease) {
             $inputBox.val(currentValue + 1);
-            return;
+            valueUpdated = true;
         }
         if(character === 40 && canDecrease){
             $inputBox.val(currentValue - 1);
-            return;
+            valueUpdated = true;
         }
-        return;
+        return valueUpdated;
     }
 }
 
