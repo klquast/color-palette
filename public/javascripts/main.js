@@ -152,8 +152,6 @@ $(function(){
         }
     });
     $('#red-input, #green-input, #blue-input').keydown(function(e){
-        var valid = colorInput.validateRgbOrHsv($(this), e);
-
         var valid = colorInput.validateRgbOrHsv($(this), e),
             character = e.which;
 
@@ -441,7 +439,8 @@ var colorInput = {
         $('#brightness-input').val(hsv[2]);
     },
     updateColorPreview: function(hex) {
-        $('.color-preview-tile').css('background-color', '#' + hex);
+        $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-color', '#' + hex);
+
     },
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
