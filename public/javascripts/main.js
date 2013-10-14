@@ -1,4 +1,7 @@
 $(function(){
+    /*------------------------------------------------------------------------------------------------------------------
+    *                                            Event Listeners
+    ------------------------------------------------------------------------------------------------------------------*/
     /* Background Color Toggle*/
     $('.toggle-bg-color').click(function(){
         $('body').toggleClass('dark');
@@ -118,7 +121,7 @@ $(function(){
             colorInput.newHsvInput();
         }
     });
-    $('#hue-input, #saturation-input, #brightness-input').keyup(function(e){
+    $('#hue-input, #saturation-input, #brightness-input').keydown(function(e){
         var valid = colorInput.validateRgbOrHsv($(this), e),
             character = e.which;
 
@@ -148,7 +151,7 @@ $(function(){
             colorInput.newRgbInput();
         }
     });
-    $('#red-input, #green-input, #blue-input').keyup(function(e){
+    $('#red-input, #green-input, #blue-input').keydown(function(e){
         var valid = colorInput.validateRgbOrHsv($(this), e);
 
         var valid = colorInput.validateRgbOrHsv($(this), e),
@@ -211,9 +214,9 @@ $(function(){
     });
 });
 
-/***************
-*   FUNCTIONS
-***************/
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Color Functions
+----------------------------------------------------------------------------------------------------------------------*/
 var colors = {
     hue: function(){
         var pos = $('.selected-hue-arrows').css('top')
@@ -254,6 +257,9 @@ var colors = {
     }
 };
 
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Conversion Functions
+----------------------------------------------------------------------------------------------------------------------*/
 var convert = {
     hsvToRgb: function(hue, sat, value){
         var r, g, b;
@@ -416,6 +422,9 @@ var convert = {
     }
 };
 
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Color Input Functions
+----------------------------------------------------------------------------------------------------------------------*/
 var colorInput = {
     updateRgb: function(rgb) {
         $('#red-input').val(rgb[0]);
@@ -570,6 +579,9 @@ var colorInput = {
     }
 }
 
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Alert Functions
+----------------------------------------------------------------------------------------------------------------------*/
 var message = {
     baseHtml: function(title, content) {
         return '<div class="alert alert-dismissable"><button type="button" class="close" data-dismiss="alert">×</button><h4>' + title + '</h4><p>' + content + '</p></div>';

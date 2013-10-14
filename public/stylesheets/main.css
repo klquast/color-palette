@@ -32,6 +32,7 @@
 }
 
 body {
+    background: url(../images/noisy_net.png) repeat-x 0 0, url(../images/noisy_net.png) repeat 0 0, #FEFEFE;
     background: url(../images/brilliant.png) repeat-x 0 0, url(../images/brilliant.png) repeat 0 0, #FEFEFE;
     font-family: "Droid Sans", "Trebuchet MS", Arial, Helvetica, sans-serif;
     padding: 70px 0 0 0;
