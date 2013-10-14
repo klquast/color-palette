@@ -35,8 +35,7 @@ $(function(){
 
             $('#hue-input').val(hue);
 
-            var rgbBackGround = convert.hsvToRgb(hue, 100, 100);
-            $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackGround + ')');
+            colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
 
             var rgb = convert.hsvToRgb(hue, saturation, brightness)
             var hex = convert.rgbToHex(rgb);
@@ -86,8 +85,7 @@ $(function(){
         var brightness = colors.brightness();
 
         $('#hue-input').val(hue);
-        var rgbBackground = convert.hsvToRgb(hue, 100, 100);
-        $('.color-picker-backdrop').css('background-color', 'rgb(' + rgbBackground + ')');
+        colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
 
         var rgb = convert.hsvToRgb(hue, saturation, brightness);
         var hex = convert.rgbToHex(rgb);
@@ -135,6 +133,21 @@ $(function(){
 
         if(valid) {
             // update everything but the hsv inputs
+            var hue = colors.hueInput(),
+                saturation = colors.saturationInput(),
+                brightness = colors.brightnessInput();
+
+            var rgb = convert.hsvToRgb(hue, saturation, brightness);
+            colorInput.updateRgb(rgb);
+            var hex = convert.rgbToHex(rgb);
+            colorInput.updateHex(hex);
+            colorInput.updateColorPreview(hex);
+            colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
+            colorInput.updateSliders([hue, saturation, brightness]);
+        }
+        else {
+            var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
+            colorInput.updateHsv(hsv);
         }
     });
     $('#red-input, #green-input, #blue-input').keyup(function(e){
@@ -185,10 +198,13 @@ $(function(){
         }
 
         if(updateColor) {
+            colorInput.updateColorPreview(hexValue);
             var rgb = convert.hexToRgb(hexValue);
             colorInput.updateRgb(rgb);
             var hsv = convert.rgbToHsv(rgb[0], rgb[1], rgb[2]);
+            colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
             colorInput.updateHsv(hsv);
+            colorInput.updateSliders(hsv);
         }
 
         if(hideAlert) {
@@ -207,15 +223,24 @@ var colors = {
         var div = 256/360;
         return 360 - Math.round((pos + 8)/div);
     },
+    hueInput: function(){
+        return $('#hue-input').val();
+    },
     saturation: function(){
         var pos = $('.selected-color-circle').css('left')
         pos = parseInt(pos);
         return Math.round((pos + 8)/2.56);
     },
+    saturationInput: function(){
+        return $('#saturation-input').val();
+    },
     brightness: function(){
         var pos = $('.selected-color-circle').css('top');
         pos = parseInt(pos);
         return Math.round(100 - (pos + 8) / 2.56);
+    },
+    brightnessInput: function(){
+        return $('#brightness-input').val();
     },
     red: function(){
         return parseInt($('#red-input').val());
@@ -257,8 +282,6 @@ var convert = {
         g = Math.round(g * 255);
         b = Math.round(b * 255);
 
-//        colorInput.updateRgb([r,g,b]);
-
         return [r, g, b];
     },
     rgbToHsv: function(red, green, blue){
@@ -272,7 +295,7 @@ var convert = {
         var minRgb = Math.min(red, green, blue);
 
         if(minRgb == maxRgb) {
-            return [0, 0, minRbg];
+            return [0, 0, Math.round(minRgb*100)];
         }
 
         var d = (red == minRgb) ? green - blue : ((blue == minRgb) ? red - green : blue - red);
@@ -300,8 +323,6 @@ var convert = {
         hex = translate(r1).toString() + translate(r2).toString() +
               translate(g1).toString() + translate(g2).toString() +
               translate(b1).toString() + translate(b2).toString();
-
-//        colorInput.updateHex(hex);
 
         return hex;
 
@@ -338,17 +359,19 @@ var convert = {
         var pos1, pos2, pos3, pos4, pos5, pos6,
             r, g, b;
 
-        pos1 = hex.substr(0,1);
-        pos2 = hex.substr(1,1);
-        pos3 = hex.substr(2,1);
 
         if(hex.length === 3) {
-            var x, y, z;
-            pos4 = pos1
-            pos5 = pos2
-            pos6 = pos3
+            pos1 = hex.substr(0,1);
+            pos2 = pos1;
+            pos3 = hex.substr(1,1);
+            pos4 = pos3;
+            pos5 = hex.substr(2,1);
+            pos6 = pos5;
         }
         else {
+            pos1 = hex.substr(0,1);
+            pos2 = hex.substr(1,1);
+            pos3 = hex.substr(2,1);
             pos4 = hex.substr(3,1);
             pos5 = hex.substr(4,1);
             pos6 = hex.substr(5,1);
@@ -358,7 +381,6 @@ var convert = {
         g = translate(pos3) * 16 + translate(pos4);
         b = translate(pos5) * 16 + translate(pos6);
 
-//        colorInput.updateRgb([r,g,b]);
         return [r,g,b];
 
         function translate(value) {
@@ -400,15 +422,33 @@ var colorInput = {
     },
     updateHex: function(hex) {
         $('#hex-input').val(hex);
-        $('.color-preview-tile').css('background-color', '#' + hex);
+        this.updateColorPreview(hex);
     },
     updateHsv: function(hsv){
         $('#hue-input').val(hsv[0]);
         $('#saturation-input').val(hsv[1]);
         $('#brightness-input').val(hsv[2]);
     },
-    updateSliders: function($inputBox) {
-        //TODO: convert rgb to hsv and update the position of the sliders
+    updateColorPreview: function(hex) {
+        $('.color-preview-tile').css('background-color', '#' + hex);
+    },
+    updatePickerBackground: function(rgb) {
+        $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
+    },
+    updateSliders: function(hsv) {
+        var hue = parseInt(hsv[0]),
+            sat = parseInt(hsv[1]),
+            bri = parseInt(hsv[2]),
+            mult = 256/360;
+        var huePos = Math.round(((360 - hue) * mult) - 8);
+        var satPos = Math.round((sat * 2.56) - 8);
+        var briPos = Math.round(((100 - bri) * 2.56) - 8);
+
+        $('.selected-hue-arrows').css('top', huePos);
+        $('.selected-color-circle').css({
+            'left': satPos + 'px',
+            'top': briPos + 'px'
+        });
     },
     checkForValue: function($inputBox) {
         var maxValue = parseInt($inputBox.attr('data-max-value'));
