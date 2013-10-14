@@ -103,13 +103,8 @@ $(function(){
             var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
             colorInput.updateHsv(hsv);
         }
-    });
-    $('#red-input, #green-input, #blue-input').change(function(){
-        var valid = colorInput.checkForValue($(this));
-
-        if(!valid) {
-            var rgb = convert.hexToRgb(colors.hex());
-            colorInput.updateRgb(rgb);
+        else {
+            colorInput.newHsvInput();
         }
     });
     $('#hue-input, #saturation-input, #brightness-input').blur(function(){
@@ -119,6 +114,28 @@ $(function(){
             var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
             colorInput.updateHsv(hsv);
         }
+        else {
+            colorInput.newHsvInput();
+        }
+    });
+    $('#hue-input, #saturation-input, #brightness-input').keyup(function(e){
+        var valid = colorInput.validateRgbOrHsv($(this), e),
+            character = e.which;
+
+        if(valid && (character === 38 || character === 40)) {
+            colorInput.newHsvInput();
+        }
+    });
+    $('#red-input, #green-input, #blue-input').change(function(){
+        var valid = colorInput.checkForValue($(this));
+
+        if(!valid) {
+            var rgb = convert.hexToRgb(colors.hex());
+            colorInput.updateRgb(rgb);
+        }
+        else {
+            colorInput.newRgbInput();
+        }
     });
     $('#red-input, #green-input, #blue-input').blur(function(){
         var valid = colorInput.checkForValue($(this));
@@ -127,37 +144,18 @@ $(function(){
             var rgb = convert.hexToRgb(colors.hex());
             colorInput.updateRgb(rgb);
         }
-    });
-    $('#hue-input, #saturation-input, #brightness-input').keyup(function(e){
-        var valid = colorInput.validateRgbOrHsv($(this), e);
-
-        if(valid) {
-            // update everything but the hsv inputs
-            var hue = colors.hueInput(),
-                saturation = colors.saturationInput(),
-                brightness = colors.brightnessInput();
-
-            var rgb = convert.hsvToRgb(hue, saturation, brightness);
-            colorInput.updateRgb(rgb);
-            var hex = convert.rgbToHex(rgb);
-            colorInput.updateHex(hex);
-            colorInput.updateColorPreview(hex);
-            colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
-            colorInput.updateSliders([hue, saturation, brightness]);
-        }
         else {
-            var hsv = convert.rgbToHsv(colors.red(), colors.green(), colors.blue());
-            colorInput.updateHsv(hsv);
+            colorInput.newRgbInput();
         }
     });
     $('#red-input, #green-input, #blue-input').keyup(function(e){
         var valid = colorInput.validateRgbOrHsv($(this), e);
 
-        if(valid) {
-            // update everything but the rgb inputs
-        }
-        else {
-            // reset the text box
+        var valid = colorInput.validateRgbOrHsv($(this), e),
+            character = e.which;
+
+        if(valid && (character === 38 || character === 40)) {
+            colorInput.newRgbInput();
         }
     });
     /* Hex Input Box */
@@ -286,6 +284,10 @@ var convert = {
     },
     rgbToHsv: function(red, green, blue){
         var h, s, v;
+
+        red = parseInt(red);
+        green = parseInt(green);
+        blue = parseInt(blue);
 
         red /= 255;
         green /= 255;
@@ -539,6 +541,32 @@ var colorInput = {
             valueUpdated = true;
         }
         return valueUpdated;
+    },
+    newHsvInput: function() {
+        var hue = colors.hueInput(),
+            saturation = colors.saturationInput(),
+            brightness = colors.brightnessInput();
+
+        var rgb = convert.hsvToRgb(hue, saturation, brightness);
+        colorInput.updateRgb(rgb);
+        var hex = convert.rgbToHex(rgb);
+        colorInput.updateHex(hex);
+        colorInput.updateColorPreview(hex);
+        colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
+        colorInput.updateSliders([hue, saturation, brightness]);
+    },
+    newRgbInput: function() {
+        var red = colors.red(),
+            green = colors.green(),
+            blue = colors.blue();
+
+        var hsv = convert.rgbToHsv(red, green, blue);
+        colorInput.updateHsv(hsv);
+        var hex = convert.rgbToHex([red, green, blue]);
+        colorInput.updateHex(hex);
+        colorInput.updateColorPreview(hex);
+        colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
+        colorInput.updateSliders(hsv);
     }
 }
 
