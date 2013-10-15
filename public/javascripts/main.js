@@ -127,12 +127,20 @@ $(function(){
         }
     });
     $('#hue-input, #saturation-input, #brightness-input').keydown(function(e){
-        var valid = colorInput.validateRgbOrHsv($(this), e),
-            character = e.which;
+        var character = e.which;
 
-        if(valid && (character === 38 || character === 40)) {
+        if(character !== 38 && character !== 40) {
+            return;
+        }
+
+        var valid = colorInput.incDecValue($(this), character);
+
+        if(valid) {
             colorInput.newHsvInput();
         }
+    });
+    $('#hue-input, #saturation-input, #brightness-input').keyup(function(e){
+        var valid = colorInput.validateRgbOrHsv($(this), e);
     });
     $('#red-input, #green-input, #blue-input').change(function(){
         var valid = colorInput.checkForValue($(this));
@@ -157,12 +165,20 @@ $(function(){
         }
     });
     $('#red-input, #green-input, #blue-input').keydown(function(e){
-        var valid = colorInput.validateRgbOrHsv($(this), e),
-            character = e.which;
+        var character = e.which;
 
-        if(valid && (character === 38 || character === 40)) {
-            colorInput.newRgbInput();
+        if(character !== 38 && character !== 40) {
+            return;
         }
+
+        var valid = colorInput.incDecValue($(this), character);
+
+        if(valid) {
+            colorInput.newHsvInput();
+        }
+    });
+    $('#red-input, #green-input, #blue-input').keyup(function(e){
+        var valid = colorInput.validateRgbOrHsv($(this), e);
     });
     /* Hex Input Box */
     $('#hex-input').change(function(){
@@ -530,11 +546,6 @@ var colorInput = {
     },
     validateRgbOrHsv: function($inputBox, e){
         var valid = true;
-
-        var character = e.which;
-        if(character === 38 || character === 40) {
-            valid = this.incDecValue($inputBox, character);
-        }
 
         var maxValue = parseInt($inputBox.attr('data-max-value'));
         var currentValue = parseInt($inputBox.val());

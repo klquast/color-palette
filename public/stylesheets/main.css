@@ -67,7 +67,7 @@ h3 {
 /* Alerts */
 .alert-container {
     display: none;
-    position: absolute;
+    position: fixed;
     right: 5px;
     width: 250px;
     z-index: 5;
