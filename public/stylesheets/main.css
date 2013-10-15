@@ -140,20 +140,30 @@ h3 {
 }
 
 /* Saved colors */
-.color-drop-tile {
+.color-drop-spot {
     border: 5px dashed #5a5e5d;
     border-radius: 5px;
     color: #698aac;
     font-family: "Droid Sans Bold", "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 13px;
-    height: 100px;
-    padding-top: 20px;
+    height: 110px;
+    padding-top: 25px;
     text-align: center;
     text-transform: uppercase;
-    width: 100px;
+    width: 110px;
 }
 
 body.dark .color-preview-tile,
-body.dark .color-drop-tile {
+body.dark .color-drop-spot {
     border-color: #e4e4f1;
+}
+
+.ui-state-hover,
+body.dark .ui-state-hover {
+    border-color: #EC008B;
+}
+
+.ui-state-active,
+body.dark .ui-state-active {
+    border-color: #18BC9C;
 }

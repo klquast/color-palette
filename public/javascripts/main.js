@@ -1,5 +1,10 @@
 $(function(){
     /*------------------------------------------------------------------------------------------------------------------
+    *                                            Variables
+    ------------------------------------------------------------------------------------------------------------------*/
+
+
+    /*------------------------------------------------------------------------------------------------------------------
     *                                            Event Listeners
     ------------------------------------------------------------------------------------------------------------------*/
     /* Background Color Toggle*/
@@ -9,7 +14,7 @@ $(function(){
 
     /* Make selected-color-circle draggable */
     $('.selected-color-circle').draggable({
-        containment: ".color-picker",
+        containment: '.color-picker',
         scroll: false,
         drag: function(e) {
             var hue = colors.hue();
@@ -29,7 +34,7 @@ $(function(){
     /* Make selected-color-circle draggable */
     $('.selected-hue-arrows').draggable({
         axis: 'y',
-        containment: ".hue-slider",
+        containment: '.hue-slider',
         scroll: false,
         drag: function() {
             var hue = colors.hue();
@@ -174,7 +179,7 @@ $(function(){
         var ignoreFirstChar = hexValue.substr(0,1) !== '#';
 
         if(allowedChars.test(hexValue)) {
-            message.showWarning("Warning", "Hex contains an invalid character. Legal characters include 0-9 and A-F.");
+            message.showWarning('Warning', 'Hex contains an invalid character. Legal characters include 0-9 and A-F.');
             hideAlert = false;
         }
         else if(hexValue.length === 3 && ignoreFirstChar) {
@@ -192,7 +197,7 @@ $(function(){
             updateColor = true;
         }
         else if(hexValue.length > 6 && ignoreFirstChar) {
-            message.showWarning("Warning", "Hex value cannot contain more than 6 characters");
+            message.showWarning('Warning', 'Hex value cannot contain more than 6 characters');
             hideAlert = false;
         }
 
@@ -208,6 +213,25 @@ $(function(){
 
         if(hideAlert) {
             message.hideAlert();
+        }
+    });
+
+    /* Make color preview draggable */
+    $('.color-preview-tile').draggable({
+        revert: 'invalid'
+    });
+
+    $('.color-drop-spot').droppable({
+        activeClass: 'ui-state-hover',
+        hoverClass: 'ui-state-active',
+        drop: function(e, ui) {
+            $('.color-preview-tile').animate({
+                'top': '0',
+                'left': '0'
+            });
+            message.showSuccess('Success', 'Color successfully added!');
+            var newColor = ui.draggable.attr('data-current-color');
+            savedColors.addNewColor(null, newColor);
         }
     });
 });
@@ -576,7 +600,23 @@ var colorInput = {
         colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
         colorInput.updateSliders(hsv);
     }
-}
+};
+
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Saved Color Functions
+----------------------------------------------------------------------------------------------------------------------*/
+var savedColors = {
+    getCount: $('.saved-color').length,
+    addNewColor: function(position, newColor) {
+        var count = this.getCount;
+
+        if(position === undefined || position === null) {
+            position = this.getCount;
+        }
+
+        //alert('New color at position: ' + position + '. Color: ' + newColor);
+    }
+};
 
 /*----------------------------------------------------------------------------------------------------------------------
 *                                            Alert Functions
@@ -594,5 +634,14 @@ var message = {
         $('.alert-container').fadeOut('slow', function(){
             $(this).html('');
         });
+    },
+    showSuccess: function(title, content) {
+        var $baseHtml = $(this.baseHtml(title, content));
+        $baseHtml.addClass('alert-success');
+        $('.alert-container').html($baseHtml).fadeIn('slow', function(){
+            $(this).delay(3000).fadeOut('slow', function(){
+                $(this).html('');
+            });
+        });
     }
-}
+};
