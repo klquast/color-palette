@@ -167,3 +167,21 @@ body.dark .ui-state-hover {
 body.dark .ui-state-active {
     border-color: #18BC9C;
 }
+
+.reorder-drop-spot {
+    float: left;
+}
+
+.position-indicator {
+    margin: auto;
+}
+
+.saved-color {
+    float: left;
+    height: 100px;
+    width: 110px;
+}
+
+.color {
+    margin: auto;
+}
