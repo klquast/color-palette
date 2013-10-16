@@ -238,6 +238,7 @@ $(function(){
     });
 
     $('.color-drop-spot').droppable({
+        accept: '.color-preview-tile',
         activeClass: 'ui-state-hover',
         hoverClass: 'ui-state-active',
         drop: function(e, ui) {
