@@ -170,10 +170,17 @@ body.dark .ui-state-active {
 
 .reorder-drop-spot {
     float: left;
+    width: 50px;
 }
 
 .position-indicator {
+    height: 100px;
     margin: auto;
+    width: 1px;
+}
+
+.position-indicator {
+    background: #5a5e5d;
 }
 
 .saved-color {
