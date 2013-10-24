@@ -203,6 +203,7 @@ body.dark .ui-state-active {
 
 .color {
     border: 5px solid #5a5e5d;
+    border-radius: 4px;
     height: 100px;
     margin: auto;
     width: 100px;
