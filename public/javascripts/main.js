@@ -1,11 +1,20 @@
+/*------------------------------------------------------------------------------------------------------------------
+*                                            Variables
+------------------------------------------------------------------------------------------------------------------*/
+var firstDropSpotSize = 10;
+var dropSpotSize = 30;
+var savedColorSize = 110;
+var rowSize;
+var currentColorsPerRow;
+
 $(function(){
-    /*------------------------------------------------------------------------------------------------------------------
-    *                                            Variables
-    ------------------------------------------------------------------------------------------------------------------*/
 
     /*------------------------------------------------------------------------------------------------------------------
     *                                            Event Listeners
     ------------------------------------------------------------------------------------------------------------------*/
+    rowSize = $('.saved-colors-panel .row').width();
+    currentColorsPerRow = savedColors.colorsPerRow(rowSize);
+
     $('.show-tooltip').tooltip({ showHtml: true});
 
     /* Background Color Toggle*/
@@ -238,19 +247,23 @@ $(function(){
         revert: 'invalid'
     });
 
-    $('.color-drop-spot').droppable({
-        accept: '.color-preview-tile',
-        activeClass: 'ui-state-hover',
-        hoverClass: 'ui-state-active',
-        drop: function(e, ui) {
-            $('.color-preview-tile').animate({
-                'top': '0',
-                'left': '0'
-            });
-            message.showSuccess('Success', 'Color successfully added!');
-            var newColor = ui.draggable.attr('data-current-color');
-            savedColors.addNewColor(null, newColor);
+    /* Register droppable event listeners */
+    droppableEvents.register();
+
+    $('.add-color').click(function(){
+        var newColor = $('.color-preview-tile').attr('data-current-color');
+        savedColors.addNewColor(null, newColor);
+    });
+
+    $(window).resize(function(){
+        var newRowSize = $('.saved-colors-panel .row').width();
+
+        if(rowSize === newRowSize) {
+            return;
         }
+
+        rowSize = newRowSize;
+        savedColors.repositionRows(newRowSize);
     });
 });
 
@@ -619,15 +632,81 @@ var colorInput = {
 *                                            Saved Color Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var savedColors = {
-    getCount: $('.saved-color').length,
     addNewColor: function(position, newColor) {
-        var count = this.getCount;
+        var $lastRow = $('.saved-colors-panel .row').last();
+        var rowWidth = $lastRow.width();
+        var dropSpotCount = $('.reorder-drop-spot', $lastRow).length;
+        var savedColorCount = $('.saved-color', $lastRow).length;
+        var fullColorCount = $('.saved-color').length;
 
         if(position === undefined || position === null) {
-            position = this.getCount;
+            position = fullColorCount;
         }
 
-        //alert('New color at position: ' + position + '. Color: ' + newColor);
+        $('.new-color-template .saved-color').attr('data-pos', position);
+        $('.new-color-template .color').css('background-color', newColor);
+        $('.new-color-template .reorder-drop-spot').attr('data-new-pos', position);
+
+        var clone = $('.new-color-template').html();
+
+        // Check to see if new row is needed
+        var dropSpotSpace = (dropSpotCount - 1) * dropSpotSize + firstDropSpotSize;
+        var savedColorSpace = savedColorCount * savedColorSize;
+        var spaceNeeded = dropSpotSize + savedColorSize;
+        var spaceRemaining = rowWidth - dropSpotSpace - savedColorSpace;
+        if(spaceRemaining < spaceNeeded) {
+            $lastRow.after('<div class="row"></div>');
+            var $dropSpot = $('.color-drop-spot');
+            $lastRow = $('.saved-colors-panel .row').last();
+            $lastRow.html($dropSpot);
+        }
+        $('.color-drop-spot').before(clone);
+
+        message.showSuccess('Success', 'Color successfully added!');
+    },
+    repositionRows: function(rowWidth) {
+        var dropSpotCount = $('.reorder-drop-spot').length;
+        var savedColorCount = $('.saved-colors-panel .saved-color').length;
+        var perRow = this.colorsPerRow(rowWidth);
+
+        if(savedColorCount <= 0 || currentColorsPerRow === perRow) {
+            return;
+        }
+
+        var rowsRequired = Math.ceil(savedColorCount / perRow);
+        var $newHtml =  $('<div></div>');
+        for(i = 0; i < rowsRequired; i++) {
+            $newHtml.append('<div class="row"></div>');
+        }
+
+        currentColorsPerRow = perRow;
+        var currRow = 1,
+            itemsCount = 0,
+            currentDropSpots = $('.saved-colors-panel .reorder-drop-spot').toArray();
+            currentColors = $('.saved-colors-panel .saved-color').toArray();
+            $currentRow = $($newHtml.find('.row')[0]);
+
+        while(currentColors.length > 0) {
+            if(itemsCount === perRow) {
+                currRow++;
+                itemsCount = 0;
+                $currentRow = $($newHtml.find('.row')[currRow - 1]);
+            }
+
+            $currentRow.append(currentDropSpots.shift());
+            $currentRow.append(currentColors.shift());
+            itemsCount++;
+        }
+
+        var $dropSpot = $('.color-drop-spot');
+        $lastRow = $newHtml.find('.row').last();
+        $lastRow.append($dropSpot);
+        $('.saved-colors-panel').html($newHtml.html());
+        droppableEvents.register();
+    },
+    colorsPerRow: function(rowWidth) {
+        var spaceAfterFirstColor = rowWidth - firstDropSpotSize - savedColorSize;
+        return Math.floor(spaceAfterFirstColor / (dropSpotSize + savedColorSize)) + 1;
     }
 };
 
@@ -650,11 +729,34 @@ var message = {
     },
     showSuccess: function(title, content) {
         var $baseHtml = $(this.baseHtml(title, content));
+        var $alertContainer = $('.alert-container');
         $baseHtml.addClass('alert-success');
-        $('.alert-container').html($baseHtml).fadeIn('slow', function(){
+        $alertContainer.html($baseHtml).fadeIn('slow', function(){
             $(this).delay(3000).fadeOut('slow', function(){
                 $(this).html('');
             });
         });
     }
 };
+
+/*----------------------------------------------------------------------------------------------------------------------
+*                                            Droppable Event Listeners
+----------------------------------------------------------------------------------------------------------------------*/
+var droppableEvents = {
+    register: function(){
+        $('.color-drop-spot').droppable({
+            accept: '.color-preview-tile',
+            activeClass: 'ui-state-hover',
+            hoverClass: 'ui-state-active',
+            drop: function(e, ui) {
+                $('.color-preview-tile').animate({
+                    'top': '0',
+                    'left': '0'
+                });
+                message.showSuccess('Success', 'Color successfully added!');
+                var newColor = ui.draggable.attr('data-current-color');
+                savedColors.addNewColor(null, newColor);
+            }
+        });
+    }
+}

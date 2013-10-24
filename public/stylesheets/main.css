@@ -59,7 +59,7 @@ h3 {
     text-transform: uppercase;
 }
 
-.add-color {
+.add-color-panel {
     margin-bottom: 40px;
     margin-left: 10px;
 }
@@ -78,6 +78,10 @@ h3 {
     height: 272px;
     position: relative;
     width: 272px;
+}
+
+.color-picker img {
+    cursor: crosshair;
 }
 
 .color-picker-backdrop {
@@ -134,6 +138,7 @@ h3 {
     background-color: #408080;
     border: 5px solid #5a5e5d;
     border-radius: 4px;
+    cursor: move;
     height: 100px;
     margin-bottom: 10px;
     width: 100px;
@@ -144,9 +149,11 @@ h3 {
     border: 5px dashed #5a5e5d;
     border-radius: 5px;
     color: #698aac;
+    float: left;
     font-family: "Droid Sans Bold", "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 13px;
     height: 110px;
+    margin-left: 20px;
     padding-top: 25px;
     text-align: center;
     text-transform: uppercase;
@@ -170,12 +177,17 @@ body.dark .ui-state-active {
 
 .reorder-drop-spot {
     float: left;
-    width: 50px;
+    width: 30px;
+}
+
+.reorder-drop-spot:first-child {
+    width: 10px;
 }
 
 .position-indicator {
-    height: 100px;
+    height: 110px;
     margin: auto;
+    visibility: hidden;
     width: 1px;
 }
 
@@ -185,10 +197,21 @@ body.dark .ui-state-active {
 
 .saved-color {
     float: left;
-    height: 100px;
+    height: 110px;
     width: 110px;
 }
 
 .color {
+    border: 5px solid #5a5e5d;
+    height: 100px;
     margin: auto;
+    width: 100px;
+}
+
+body.dark .color {
+    border-color: #e4e4f1;
+}
+
+.new-color-template {
+    display: none;
 }

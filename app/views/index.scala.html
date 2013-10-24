@@ -3,7 +3,7 @@
 @main("Home") {
 
     <h3>Add A Color</h3>
-    <div class="add-color">
+    <div class="add-color-panel">
         <div class="row">
             <div class="col-md-1 col-sm-1 col-xs-1">
                 <div class="hue-slider">
@@ -63,24 +63,23 @@
                     <label class="control-label" for="hex-input">#</label>
                     <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" value="408080" maxlength="7">
                 </div>
+                <button type="button" class="btn btn-primary show-tooltip add-color" title="Note: You can also add a color by dragging and dropping the preview into the saved colors area">Add Color</button>
             </div>
         </div>
     </div>
     <h3>Saved Colors</h3>
     <div class="saved-colors-panel">
         <div class="row">
-            <div class="reorder-drop-spot" data-new-pos="1"><div class="position-indicator"></div></div>
-            <div class="saved-color" data-pos="1"><div class="color"></div></div>
-            <div class="reorder-drop-spot" data-new-pos="2"><div class="position-indicator"></div></div>
-            <div class="saved-color" data-pos="2"><div class="color"></div></div>
-            <div class="reorder-drop-spot" data-new-pos="3"><div class="position-indicator"></div></div>
-            <div class="saved-color" data-pos="3"><div class="color"></div></div>
-            <div class="reorder-drop-spot" data-new-pos="4"><div class="position-indicator"></div></div>
-            <div class="saved-color" data-pos="4"><div class="color"></div></div>
+            <div class="color-drop-spot">
+                Drop<br/>Color<br />Here
+            </div>
         </div>
 
-        <div class="color-drop-spot">
-            Drop<br/>Color<br />Here
+    </div>
+    <div class="new-color-template">
+        <div class="reorder-drop-spot"><div class="position-indicator"></div></div>
+        <div class="saved-color">
+            <div class="color"></div>
         </div>
     </div>
 }
