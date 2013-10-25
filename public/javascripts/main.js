@@ -248,7 +248,7 @@ $(function(){
     });
 
     /* Register droppable event listener */
-    eventListeners.droppable();
+    eventListeners.makeDroppable();
 
     $('.add-color').click(function(){
         var newColor = $('.color-preview-tile').attr('data-current-color');
@@ -263,7 +263,7 @@ $(function(){
         }
 
         rowSize = newRowSize;
-        savedColors.repositionRows(newRowSize);
+        savedColors.repositionRows(true, newRowSize);
     });
 });
 
@@ -680,17 +680,20 @@ var savedColors = {
                 $(this).attr('data-pos', index);
                 index++;
             });
+
+            var newRowSize = $('.saved-colors-panel .row').width();
+            savedColors.repositionRows(false, newRowSize);
         }
 
-        eventListeners.droppable();
+        eventListeners.makeDroppable();
         message.showSuccess('Success', 'Color successfully added!');
     },
-    repositionRows: function(rowWidth) {
+    repositionRows: function(resized, rowWidth) {
         var dropSpotCount = $('.reorder-drop-spot').length;
         var savedColorCount = $('.saved-colors-panel .saved-color').length;
         var perRow = this.colorsPerRow(rowWidth);
 
-        if(savedColorCount <= 0 || currentColorsPerRow === perRow) {
+        if(resized && (savedColorCount <= 0 || currentColorsPerRow === perRow)) {
             return;
         }
 
@@ -723,7 +726,7 @@ var savedColors = {
         $lastRow = $newHtml.find('.row').last();
         $lastRow.append($dropSpot);
         $('.saved-colors-panel').html($newHtml.html());
-        eventListeners.droppable();
+        eventListeners.makeDroppable();
     },
     colorsPerRow: function(rowWidth) {
         var spaceAfterFirstColor = rowWidth - firstDropSpotSize - savedColorSize;
@@ -770,7 +773,7 @@ var message = {
 *                                            Droppable Event Listeners
 ----------------------------------------------------------------------------------------------------------------------*/
 var eventListeners = {
-    droppable: function(){
+    makeDroppable: function(){
         $('.color-drop-spot').droppable({
             accept: '.color-preview-tile',
             activeClass: 'ui-state-hover',
