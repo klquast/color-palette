@@ -247,8 +247,8 @@ $(function(){
         revert: 'invalid'
     });
 
-    /* Register droppable event listeners */
-    droppableEvents.register();
+    /* Register droppable event listener */
+    eventListeners.droppable();
 
     $('.add-color').click(function(){
         var newColor = $('.color-preview-tile').attr('data-current-color');
@@ -660,8 +660,14 @@ var savedColors = {
             $lastRow = $('.saved-colors-panel .row').last();
             $lastRow.html($dropSpot);
         }
-        $('.color-drop-spot').before(clone);
+        if(position === fullColorCount) {
+            $('.color-drop-spot').before(clone);
+        }
+        else {
+            // put in new spot and increment all items after it
+        }
 
+        eventListeners.droppable();
         message.showSuccess('Success', 'Color successfully added!');
     },
     repositionRows: function(rowWidth) {
@@ -702,7 +708,7 @@ var savedColors = {
         $lastRow = $newHtml.find('.row').last();
         $lastRow.append($dropSpot);
         $('.saved-colors-panel').html($newHtml.html());
-        droppableEvents.register();
+        eventListeners.droppable();
     },
     colorsPerRow: function(rowWidth) {
         var spaceAfterFirstColor = rowWidth - firstDropSpotSize - savedColorSize;
@@ -731,9 +737,15 @@ var message = {
         var $baseHtml = $(this.baseHtml(title, content));
         var $alertContainer = $('.alert-container');
         $baseHtml.addClass('alert-success');
-        $alertContainer.html($baseHtml).fadeIn('slow', function(){
-            $(this).delay(3000).fadeOut('slow', function(){
-                $(this).html('');
+        var dateTime = new Date().getTime();
+        $baseHtml.attr('data-time-stamp', dateTime);
+        $alertContainer.append($baseHtml);
+        var $thisAlert = $alertContainer.find('.alert-success').filter(function(){
+             return $(this).attr('data-time-stamp') === dateTime.toString();
+         });
+        $thisAlert.fadeIn('slow', function(){
+            $thisAlert.delay(3000).fadeOut('slow', function(){
+                $thisAlert.html('');
             });
         });
     }
@@ -742,8 +754,8 @@ var message = {
 /*----------------------------------------------------------------------------------------------------------------------
 *                                            Droppable Event Listeners
 ----------------------------------------------------------------------------------------------------------------------*/
-var droppableEvents = {
-    register: function(){
+var eventListeners = {
+    droppable: function(){
         $('.color-drop-spot').droppable({
             accept: '.color-preview-tile',
             activeClass: 'ui-state-hover',
@@ -753,9 +765,22 @@ var droppableEvents = {
                     'top': '0',
                     'left': '0'
                 });
-                message.showSuccess('Success', 'Color successfully added!');
                 var newColor = ui.draggable.attr('data-current-color');
                 savedColors.addNewColor(null, newColor);
+            }
+        });
+        $('.reorder-drop-spot').droppable({
+            accept: '.color-preview-tile',
+            activeClass: 'ui-state-hover',
+            hoverClass: 'ui-state-active',
+            drop: function(e, ui) {
+                $('.color-preview-tile').animate({
+                    'top': '0',
+                    'left': '0'
+                });
+                var newColor = ui.draggable.attr('data-current-color');
+                var position = $(e.target).attr('data-new-pos');
+                savedColors.addNewColor(position, newColor);
             }
         });
     }
