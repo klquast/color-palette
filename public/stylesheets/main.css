@@ -180,28 +180,38 @@ body.dark .ui-state-active {
 
 .reorder-drop-spot {
     float: left;
-    width: 30px;
+    width: 40px;
 }
 
 .reorder-drop-spot:first-child {
-    width: 10px;
+    margin-left: -30px;
+    width: 40px;
+}
+
+.reorder-drop-spot.ui-state-active .position-indicator {
+    visibility: visible;
 }
 
 .position-indicator {
-    height: 110px;
+    height: 120px;
     margin: auto;
+    margin-top: -10px;
     visibility: hidden;
-    width: 1px;
+    width: 3px;
 }
 
 .position-indicator {
     background: #5a5e5d;
 }
 
+body.dark .position-indicator {
+    background: #e4e4f1;
+}
+
 .saved-color {
     float: left;
     height: 110px;
-    width: 110px;
+    width: 100px;
 }
 
 .color {

@@ -2,8 +2,8 @@
 *                                            Variables
 ------------------------------------------------------------------------------------------------------------------*/
 var firstDropSpotSize = 10;
-var dropSpotSize = 30;
-var savedColorSize = 110;
+var dropSpotSize = 40;
+var savedColorSize = 100;
 var rowSize;
 var currentColorsPerRow;
 
@@ -641,11 +641,11 @@ var savedColors = {
 
         if(position === undefined || position === null) {
             position = fullColorCount;
+            $('.new-color-template .reorder-drop-spot').attr('data-new-pos', position);
         }
 
         $('.new-color-template .saved-color').attr('data-pos', position);
         $('.new-color-template .color').css('background-color', newColor);
-        $('.new-color-template .reorder-drop-spot').attr('data-new-pos', position);
 
         var clone = $('.new-color-template').html();
 
@@ -665,6 +665,21 @@ var savedColors = {
         }
         else {
             // put in new spot and increment all items after it
+            var $newSpot = $('.reorder-drop-spot', '.saved-colors-panel').filter(function(){
+                return $(this).attr('data-new-pos') === position;
+            });
+
+            $newSpot.before(clone);
+            var index = 1;
+            $('.reorder-drop-spot').each(function(){
+                $(this).attr('data-new-pos', index);
+                index++;
+            });
+            var index = 1;
+            $('.saved-color').each(function(){
+                $(this).attr('data-pos', index);
+                index++;
+            });
         }
 
         eventListeners.droppable();
