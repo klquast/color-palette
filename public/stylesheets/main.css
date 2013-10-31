@@ -262,3 +262,12 @@ body.dark .color {
     font-weight: normal;
     vertical-align: middle;
 }
+
+/* Tooltip */
+.tooltip-inner {
+    background-color: #2C3E50;
+}
+
+.tooltip.top .tooltip-arrow {
+    border-top-color: rgba(44,62,80,1);
+}
