@@ -253,8 +253,7 @@ $(function(){
     eventListeners.makeDroppable();
 
     $('.add-color').click(function(){
-        var newColor = $('.color-preview-tile').attr('data-current-color');
-        savedColors.addNewColor(null, newColor);
+        savedColors.addNewColor(null, $('.color-preview-tile'));
     });
 
     $(window).resize(function(){
@@ -513,8 +512,9 @@ var colorInput = {
         $('#brightness-input').val(hsv[2]);
     },
     updateColorPreview: function(hex) {
-        $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-color', '#' + hex);
-
+        $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
+        $('.color-preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
+        $('.color-preview-tile').attr('data-current-tag', $('#tag-input').val());
     },
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
@@ -653,12 +653,16 @@ var colorInput = {
 *                                            Saved Color Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var savedColors = {
-    addNewColor: function(position, newColor) {
+    addNewColor: function(position, $newColor) {
         var $lastRow = $('.saved-colors-panel .row').last();
         var rowWidth = $lastRow.width();
         var dropSpotCount = $('.reorder-drop-spot', $lastRow).length;
         var savedColorCount = $('.saved-color', $lastRow).length;
         var fullColorCount = $('.saved-color').length;
+
+        var newHex = $newColor.attr('data-current-hex');
+        var newRgb = $newColor.attr('data-current-rgb');
+        var newTag = $newColor.attr('data-current-tag');
 
         if(position === undefined || position === null) {
             position = fullColorCount;
@@ -666,7 +670,10 @@ var savedColors = {
         }
 
         $('.new-color-template .saved-color').attr('data-pos', position);
-        $('.new-color-template .color').css('background-color', newColor);
+        $('.new-color-template .color').css('background-color', newHex);
+        $('.new-color-template .saved-hex').html(newHex);
+        $('.new-color-template .saved-rgb').html(newRgb);
+        $('.new-color-template .saved-tag').html(newTag);
 
         var clone = $('.new-color-template').html();
 
@@ -821,8 +828,7 @@ var eventListeners = {
                     'top': '0',
                     'left': '0'
                 });
-                var newColor = ui.draggable.attr('data-current-color');
-                savedColors.addNewColor(null, newColor);
+                savedColors.addNewColor(null, $('.color-preview-tile'));
             }
         });
         $('.reorder-drop-spot').droppable({
@@ -834,9 +840,8 @@ var eventListeners = {
                     'top': '0',
                     'left': '0'
                 });
-                var newColor = ui.draggable.attr('data-current-color');
                 var position = $(e.target).attr('data-new-pos');
-                savedColors.addNewColor(position, newColor);
+                savedColors.addNewColor(position, $('.color-preview-tile'));
             }
         });
     }

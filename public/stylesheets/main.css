@@ -235,8 +235,13 @@ body.dark .position-indicator {
 
 .saved-color {
     float: left;
-    height: 110px;
+    height: 150px;
     width: 100px;
+}
+
+.saved-attributes {
+    font-size: 13px;
+    text-align: center;
 }
 
 .color {
