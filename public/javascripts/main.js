@@ -162,6 +162,8 @@ $(function(){
         else {
             colorInput.newRgbInput();
         }
+
+        $('#rgb-copy-text').val('rgb(' + colors.red() + ',' + colors.green() + ',' + colors.blue() + ')');
     });
     $('#red-input, #green-input, #blue-input').blur(function(){
         var valid = colorInput.checkForValue($(this));
@@ -184,7 +186,7 @@ $(function(){
         var valid = colorInput.incDecValue($(this), character);
 
         if(valid) {
-            colorInput.newHsvInput();
+            colorInput.newRgbInput();
         }
     });
     $('#red-input, #green-input, #blue-input').keyup(function(e){
@@ -498,6 +500,8 @@ var colorInput = {
         $('#red-input').val(rgb[0]);
         $('#green-input').val(rgb[1]);
         $('#blue-input').val(rgb[2]);
+
+        $('#rgb-copy-text').val('rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')');
     },
     updateHex: function(hex) {
         $('#hex-input').val(hex);
@@ -640,6 +644,8 @@ var colorInput = {
         colorInput.updateColorPreview(hex);
         colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
         colorInput.updateSliders(hsv);
+
+        $('#rgb-copy-text').val('rgb(' + red + ',' + green + ',' + blue + ')');
     }
 };
 
@@ -759,10 +765,11 @@ var message = {
     showWarning: function(title, content) {
         var $baseHtml = $(this.baseHtml(title, content));
         $baseHtml.addClass('alert-warning');
-        $('.alert-container').html($baseHtml).fadeIn();
+        $('.alert-container').html($baseHtml);
+        $baseHtml.fadeIn();
     },
     hideAlert: function() {
-        $('.alert-container').fadeOut('slow', function(){
+        $('.alert').fadeOut('slow', function(){
             $(this).html('');
         });
     },
