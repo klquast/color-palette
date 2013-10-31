@@ -161,6 +161,12 @@ h3 {
     width: 70px;
 }
 
+.tag-input {
+    display: inline-block;
+    margin-bottom: 10px;
+    width: 106px;
+}
+
 /* Color Preview */
 .color-preview-tile {
     background-color: #408080;
@@ -242,6 +248,10 @@ body.dark .position-indicator {
 .saved-attributes {
     font-size: 13px;
     text-align: center;
+}
+
+.saved-tag {
+    font-style: italic;
 }
 
 .color {

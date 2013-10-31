@@ -514,7 +514,6 @@ var colorInput = {
     updateColorPreview: function(hex) {
         $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
         $('.color-preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
-        $('.color-preview-tile').attr('data-current-tag', $('#tag-input').val());
     },
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
@@ -662,7 +661,7 @@ var savedColors = {
 
         var newHex = $newColor.attr('data-current-hex');
         var newRgb = $newColor.attr('data-current-rgb');
-        var newTag = $newColor.attr('data-current-tag');
+        var newTag = $('#tag-input').val();
 
         if(position === undefined || position === null) {
             position = fullColorCount;
