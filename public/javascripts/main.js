@@ -265,6 +265,21 @@ $(function(){
         rowSize = newRowSize;
         savedColors.repositionRows(true, newRowSize);
     });
+
+    /* Copy color to clipboard */
+    var clip = new ZeroClipboard($('.copy-to-clipboard'), { moviePath: "assets/javascripts/ZeroClipboard.swf" });
+
+    clip.on('dataRequested', function(client, args){
+        message.showInfo('Copied', client.options.text + ' copied to clipboard!');
+    });
+
+    clip.on('mouseover', function(client, args){
+        $(this).attr('title', 'Copy').tooltip().mouseover();
+    });
+
+    clip.on('mouseout', function(client, args){
+        $(this).tooltip('destroy').mouseout();
+    });
 });
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -759,6 +774,22 @@ var message = {
         $baseHtml.attr('data-time-stamp', dateTime);
         $alertContainer.append($baseHtml);
         var $thisAlert = $alertContainer.find('.alert-success').filter(function(){
+             return $(this).attr('data-time-stamp') === dateTime.toString();
+         });
+        $thisAlert.fadeIn('slow', function(){
+            $thisAlert.delay(3000).fadeOut('slow', function(){
+                $thisAlert.html('');
+            });
+        });
+    },
+    showInfo: function(title, content) {
+        var $baseHtml = $(this.baseHtml(title, content));
+        var $alertContainer = $('.alert-container');
+        $baseHtml.addClass('alert-info');
+        var dateTime = new Date().getTime();
+        $baseHtml.attr('data-time-stamp', dateTime);
+        $alertContainer.append($baseHtml);
+        var $thisAlert = $alertContainer.find('.alert-info').filter(function(){
              return $(this).attr('data-time-stamp') === dateTime.toString();
          });
         $thisAlert.fadeIn('slow', function(){
