@@ -281,6 +281,11 @@ $(function(){
     clip.on('mouseout', function(client, args){
         $(this).tooltip('destroy').mouseout();
     });
+
+    /* Remove saved color */
+    $('body').on('click', '.remove-wrapper', function(){
+        savedColors.removeColor($(this).parents('.saved-color'));
+    });
 });
 
 /*----------------------------------------------------------------------------------------------------------------------
@@ -714,6 +719,12 @@ var savedColors = {
 
         eventListeners.makeDroppable();
         message.showSuccess('Success', 'Color successfully added!');
+    },
+    removeColor: function($color){
+        $color.prev('.reorder-drop-spot').remove();
+        $color.remove();
+        var newRowSize = $('.saved-colors-panel .row').width();
+        savedColors.repositionRows(false, newRowSize);
     },
     repositionRows: function(resized, rowWidth) {
         var dropSpotCount = $('.reorder-drop-spot').length;

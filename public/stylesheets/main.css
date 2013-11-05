@@ -176,6 +176,7 @@ h3 {
     height: 100px;
     margin-bottom: 10px;
     width: 100px;
+    z-index: 10;
 }
 
 /* Saved colors */
@@ -276,8 +277,8 @@ body.dark .position-indicator {
     height: 20px;
     padding: 0;
     position: absolute;
-    right: 3px;
-    top: 3px;
+    right: -10px;
+    top: -10px;
     width: 20px;
 }
 
