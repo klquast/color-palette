@@ -241,6 +241,7 @@ body.dark .position-indicator {
 }
 
 .saved-color {
+    cursor: move;
     float: left;
     height: 150px;
     width: 100px;

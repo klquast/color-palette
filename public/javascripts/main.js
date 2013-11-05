@@ -253,7 +253,7 @@ $(function(){
     eventListeners.makeDroppable();
 
     $('.add-color').click(function(){
-        savedColors.addNewColor(null, $('.color-preview-tile'));
+        savedColors.addNewColor(null, $('.color-preview-tile'), true);
     });
 
     $(window).resize(function(){
@@ -657,7 +657,7 @@ var colorInput = {
 *                                            Saved Color Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var savedColors = {
-    addNewColor: function(position, $newColor) {
+    addNewColor: function(position, $newColor, showMessage) {
         var $lastRow = $('.saved-colors-panel .row').last();
         var rowWidth = $lastRow.width();
         var dropSpotCount = $('.reorder-drop-spot', $lastRow).length;
@@ -673,7 +673,7 @@ var savedColors = {
             $('.new-color-template .reorder-drop-spot').attr('data-new-pos', position);
         }
 
-        $('.new-color-template .saved-color').attr('data-pos', position);
+        $('.new-color-template .saved-color').attr('data-pos', position).attr('data-current-hex', newHex).attr('data-current-rgb', newRgb);
         $('.new-color-template .color').css('background-color', newHex);
         $('.new-color-template .saved-hex').html(newHex);
         $('.new-color-template .saved-rgb').html(newRgb);
@@ -717,8 +717,11 @@ var savedColors = {
             savedColors.repositionRows(false, newRowSize);
         }
 
+        eventListeners.makeDraggable();
         eventListeners.makeDroppable();
-        message.showSuccess('Success', 'Color successfully added!');
+        if(showMessage) {
+            message.showSuccess('Success', 'Color successfully added!');
+        }
     },
     removeColor: function($color){
         $color.prev('.reorder-drop-spot').remove();
@@ -764,6 +767,7 @@ var savedColors = {
         $lastRow = $newHtml.find('.row').last();
         $lastRow.append($dropSpot);
         $('.saved-colors-panel').html($newHtml.html());
+        eventListeners.makeDraggable();
         eventListeners.makeDroppable();
     },
     colorsPerRow: function(rowWidth) {
@@ -838,21 +842,34 @@ var eventListeners = {
                     'top': '0',
                     'left': '0'
                 });
-                savedColors.addNewColor(null, $('.color-preview-tile'));
+                savedColors.addNewColor(null, $('.color-preview-tile'), true);
             }
         });
         $('.reorder-drop-spot').droppable({
-            accept: '.color-preview-tile',
+            accept: '.color-preview-tile, .saved-color',
             activeClass: 'ui-state-hover',
             hoverClass: 'ui-state-active',
             drop: function(e, ui) {
-                $('.color-preview-tile').animate({
-                    'top': '0',
-                    'left': '0'
-                });
-                var position = $(e.target).attr('data-new-pos');
-                savedColors.addNewColor(position, $('.color-preview-tile'));
+                if($(ui.helper.context).hasClass('color-preview-tile')) {
+                    $('.color-preview-tile').animate({
+                        'top': '0',
+                        'left': '0'
+                    });
+                    var position = $(e.target).attr('data-new-pos');
+                    savedColors.addNewColor(position, $('.color-preview-tile'), true);
+                }
+                else {
+                    var position = $(e.target).attr('data-new-pos');
+                    var $movedColor = $(ui.helper.context);
+                    $(ui.helper.context).remove();
+                    savedColors.addNewColor(position, $movedColor, false);
+                }
             }
         });
+    },
+    makeDraggable: function() {
+       $('.saved-color').draggable({
+           revert: 'invalid'
+       });
     }
 }
