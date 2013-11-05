@@ -731,7 +731,7 @@ var savedColors = {
         var savedColorCount = $('.saved-colors-panel .saved-color').length;
         var perRow = this.colorsPerRow(rowWidth);
 
-        if(resized && (savedColorCount <= 0 || currentColorsPerRow === perRow)) {
+        if((resized && (savedColorCount <= 0 || currentColorsPerRow === perRow)) || savedColorCount === 0) {
             return;
         }
 
