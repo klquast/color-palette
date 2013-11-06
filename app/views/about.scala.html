@@ -5,13 +5,27 @@
     <h1>About</h1>
     <!--Link example-->
     <a href="@routes.Application.index()">Home</a>
+    <p class="color-values"></p>
 }
 
 @scripts = {
     <script type="text/javascript">
+        var hex = ['#2d5d94', '#3165a1', '#356dae', '#3976bb', '#407ec5', '#4d87c9', '#5a90cd', '#6798d1', '#74a1d5', '#81aad9'],
+            hsv = ['212,70,58', '212,70,63', '212,70,68', '212,70,73', '212,68,77', '212,62,79', '212,56,80', '212,51,82', '212,46,84', '212,41,85'],
+            hsl;
+
+
         $(function(){
-            alert(convert.hsvToRgb(280, 75, 82));
-            alert(convert.rgbToHsv(157, 52, 209));
+            var html = '';
+
+            $.each(hex, function(index, value){
+                html += 'hex: ' + hex[index] + '&nbsp;&nbsp;&nbsp;';
+                html += 'hsv: ' + hsv[index] + '&nbsp;&nbsp;&nbsp;';
+                var arr = hsv[index].split(',');
+                html += 'hsl: ' + convert.hsvToHsl(arr[0], arr[1], arr[2]) + '<br/><br/>';
+            });
+
+            $('.color-values').html(html);
         });
     </script>
 }

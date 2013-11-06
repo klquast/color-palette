@@ -493,6 +493,24 @@ var convert = {
 
             return newValue;
         }
+    },
+    hsvToHsl: function(hue, sat, value){
+        var h,
+            s,
+            l;
+
+        sat /= 100;
+        value /= 100;
+
+        h = hue;
+        l = (2 - sat) * value;
+        s = sat * value;
+        s /= (l <= 1) ? l : 2 - l;
+        s = Math.floor(s * 100);
+        l /= 2;
+        l = Math.round(l * 100);
+
+        return [h, s, l];
     }
 };
 
