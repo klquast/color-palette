@@ -105,8 +105,15 @@ body.dark {
 }
 
 p {
-   font-size: 14px;
+   font-size: 18px;
    margin-bottom: 24px;
+}
+
+a {
+    -moz-transition: color 0.4s;
+    -o-transition: color 0.4s;
+    -webkit-transition: color 0.4s;
+    transition: color 0.4s;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
@@ -115,14 +122,54 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 h1 {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 h3 {
     text-transform: uppercase;
 }
 
+.btn {
+    -moz-transition: background 0.4s, color 0.4s, border 0.4s;
+    -o-transition: background 0.4s, color 0.4s, border 0.4s;
+    -webkit-transition: background 0.4s, color 0.4s, border 0.4s;
+    transition: background 0.4s, color 0.4s, border 0.4s;
+}
+
+.btn-success {
+    font-family: "Droid Sans Bold", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.btn.cancel-palette {
+    margin-right: 15px;
+}
+
+.text-bold {
+    font-family: "Droid Sans Bold", "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
 a.navbar-brand {
     font-size: 30px;
+}
+
+a.navbar-brand.toggle-bg-color {
+    margin-top: 5px;
+    padding: 12.5px 20px 12.5px 10px;
+}
+
+a.toggle-bg-color > span {
+    color: #7e9bb8;
+    font-size: 20px;
+
+    -moz-transition: color 0.4s;
+    -o-transition: color 0.4s;
+    -webkit-transition: color 0.4s;
+    transition: color 0.4s;
+}
+
+a.toggle-bg-color:hover > span {
+    color: #ffffff;
 }
 
 .page-content {
@@ -177,6 +224,10 @@ a.navbar-brand {
     right: 5px;
     width: 250px;
     z-index: 5;
+}
+
+.alert-container p {
+    font-size: 14px;
 }
 
 .alert {
@@ -396,4 +447,37 @@ body.dark .color {
 
 .tooltip.top .tooltip-arrow {
     border-top-color: rgba(44,62,80,1);
+}
+
+
+/* Favorite Colors Panel */
+.favorite-colors-panel {
+    max-height: 245px;
+    height: 245px;
+    overflow-y: auto;
+    padding: 10px;
+    width: 100%;
+}
+
+.favorite-color {
+    cursor: pointer;
+    float: left;
+    margin: 11px;
+}
+
+.favorite-color > .color{
+    border: 2px solid #5a5e5d;
+    height: 50px;
+    width: 50px;
+}
+
+.favorite-color > span {
+    font-size: 13px;
+}
+
+/* Media Queries */
+@media screen {
+    .navbar-brand {
+        padding: 12.5px 15px;
+    }
 }
