@@ -254,11 +254,11 @@ $(function(){
         }
 
         if(updateColor) {
-            colorInput.updateColorPreview(hexValue);
             var rgb = convert.hexToRgb(hexValue);
             colorInput.updateRgb(rgb);
             var hsv = convert.rgbToHsv(rgb[0], rgb[1], rgb[2]);
             colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
+            colorInput.updateColorPreview(hexValue);
             colorInput.updateHsv(hsv);
             colorInput.updateSliders(hsv);
         }
