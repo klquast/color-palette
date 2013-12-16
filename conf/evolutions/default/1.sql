@@ -23,8 +23,8 @@ CREATE TABLE favoriteColor (
   
   -- PALETTES
 INSERT INTO palette (name, description, lastModified, isFavorite) VALUES 
-    ('Palette Number 1', 'This was inserted as a default by the app initializing', "2013-09-21", 0),
-    ('Palette Number 2', 'This was inserted as a default by the app initializing', "2013-12-11", 1);
+    ('Palette Number 1', 'This was inserted as a default by the app initializing', '2013-09-21', 0),
+    ('Palette Number 2', 'This was inserted as a default by the app initializing', '2013-12-11', 1);
     
   -- PALETTECOLORS
 INSERT INTO paletteColor (hexValue, orderNumber, paletteId) VALUES 

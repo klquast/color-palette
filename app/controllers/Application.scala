@@ -16,7 +16,14 @@ object Application extends Controller {
 
   def editPalette = Action {
     val palettes = Seq(
-      Palette("first", Seq(Color("FFF", true, "description", Some(1), 0), Color("000", true, "description 2", Some(2), 1)), true, "first palette", Some(1)),
+      Palette(
+        "first",
+        Seq(
+          Color("FFF", true, "description", Some(1), 0),
+          Color("000", true, "description 2", Some(2), 1)),
+        true,
+        "first palette",
+        Some(1)),
       Palette("second", Seq(Color("FFF", true, "description", Some(1), 0), Color("000", true, "description 2", Some(2), 1)), true, "first palette", Some(2)))
     Ok(views.html.editPalette(palettes))
   }
