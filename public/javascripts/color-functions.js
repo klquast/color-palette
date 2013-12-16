@@ -269,15 +269,15 @@ $(function(){
     });
 
     /* Make color preview draggable */
-    $('.color-preview-tile').draggable({
-        revert: 'invalid'
-    });
+//    $('.preview-tile').draggable({
+//        revert: 'invalid'
+//    });
 
     /* Register droppable event listener */
     eventListeners.makeDroppable();
 
     $('.add-color').click(function(){
-        savedColors.addNewColor(null, $('.color-preview-tile'), true);
+        savedColors.addNewColor(null, $('.preview-tile'), true);
     });
 
     $(window).resize(function(){
@@ -564,8 +564,8 @@ var colorInput = {
         $('#brightness-input').val(hsv[2]);
     },
     updateColorPreview: function(hex) {
-        $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
-        $('.color-preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
+        $('.preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
+        $('.preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
     },
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
@@ -735,12 +735,13 @@ var savedColors = {
         var spaceRemaining = rowWidth - dropSpotSpace - savedColorSpace;
         if(spaceRemaining < spaceNeeded) {
             $lastRow.after('<div class="row"></div>');
-            var $dropSpot = $('.color-drop-spot');
+            var $dropSpot = $('.last-drop-spot');
             $lastRow = $('.saved-colors-panel .row').last();
             $lastRow.html($dropSpot);
         }
         if(position === fullColorCount) {
-            $('.color-drop-spot').before(clone);
+//            $('.color-drop-spot').before(clone);
+            $('.last-drop-spot').before(clone);
         }
         else {
             // put in new spot and increment all items after it
@@ -812,7 +813,7 @@ var savedColors = {
             itemsCount++;
         }
 
-        var $dropSpot = $('.color-drop-spot');
+        var $dropSpot = $('.last-drop-spot');
         $lastRow = $newHtml.find('.row').last();
         $lastRow.append($dropSpot);
         $('.saved-colors-panel').html($newHtml.html());
@@ -882,30 +883,30 @@ var message = {
 ----------------------------------------------------------------------------------------------------------------------*/
 var eventListeners = {
     makeDroppable: function(){
-        $('.color-drop-spot').droppable({
-            accept: '.color-preview-tile',
-            activeClass: 'ui-state-hover',
-            hoverClass: 'ui-state-active',
-            drop: function(e, ui) {
-                $('.color-preview-tile').animate({
-                    'top': '0',
-                    'left': '0'
-                });
-                savedColors.addNewColor(null, $('.color-preview-tile'), true);
-            }
-        });
+//        $('.color-drop-spot').droppable({
+//            accept: '.preview-tile',
+//            activeClass: 'ui-state-hover',
+//            hoverClass: 'ui-state-active',
+//            drop: function(e, ui) {
+//                $('.preview-tile').animate({
+//                    'top': '0',
+//                    'left': '0'
+//                });
+//                savedColors.addNewColor(null, $('.preview-tile'), true);
+//            }
+//        });
         $('.reorder-drop-spot').droppable({
-            accept: '.color-preview-tile, .saved-color',
+            accept: '.preview-tile, .saved-color',
             activeClass: 'ui-state-hover',
             hoverClass: 'ui-state-active',
             drop: function(e, ui) {
-                if($(ui.helper.context).hasClass('color-preview-tile')) {
-                    $('.color-preview-tile').animate({
+                if($(ui.helper.context).hasClass('preview-tile')) {
+                    $('.preview-tile').animate({
                         'top': '0',
                         'left': '0'
                     });
                     var position = $(e.target).attr('data-new-pos');
-                    savedColors.addNewColor(position, $('.color-preview-tile'), true);
+                    savedColors.addNewColor(position, $('.preview-tile'), true);
                 }
                 else {
                     var position = $(e.target).attr('data-new-pos');

@@ -121,12 +121,32 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 h1 {
+    font-size: 40px;
     margin-bottom: 20px;
     text-align: center;
 }
 
-h3 {
+h2 {
+    font-size: 30px;
     text-transform: uppercase;
+}
+
+h3 {
+    font-size: 26px;
+    text-transform: uppercase;
+}
+
+h4 {
+    font-size: 24px;
+}
+
+h5 {
+    font-size: 21px;
+}
+
+h6 {
+    font-family: "Droid Sans Bold", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 20px;
 }
 
 .btn {
@@ -305,11 +325,11 @@ a.toggle-bg-color:hover > span {
 }
 
 /* Color Preview */
-.color-preview-tile {
+.preview-tile {
     background-color: #408080;
     border: 5px solid #5a5e5d;
     border-radius: 4px;
-    cursor: move;
+    /*cursor: move;*/
     height: 100px;
     margin-bottom: 10px;
     width: 100px;
@@ -332,9 +352,9 @@ a.toggle-bg-color:hover > span {
     width: 110px;
 }
 
-body.dark .color-preview-tile,
+body.dark .preview-tile,
 body.dark .color-drop-spot {
-    border-color: #e4e4f1;
+    border-color: #dce4ec;
 }
 
 .ui-state-hover,
@@ -362,20 +382,22 @@ body.dark .ui-state-active {
 }
 
 .position-indicator {
+    border: 2px dashed #18BC9C;
+    border-radius: 5px;
     height: 120px;
     margin: auto;
     margin-top: -10px;
     visibility: hidden;
-    width: 3px;
+    width: 24px;
 }
 
-.position-indicator {
+/*.position-indicator {
     background: #5a5e5d;
 }
 
 body.dark .position-indicator {
-    background: #e4e4f1;
-}
+    background: #dce4ec;
+}*/
 
 .saved-color {
     cursor: move;
@@ -402,6 +424,7 @@ body.dark .position-indicator {
     width: 100px;
 }
 
+
 .saved-color:hover .remove-wrapper {
     display: inline-block;
 }
@@ -409,7 +432,7 @@ body.dark .position-indicator {
 .remove-wrapper {
     display: none;
     background: #5a5e5d;
-    border: 1px solid #e4e4f1;
+    border: 1px solid #dce4ec;
     border-radius: 10px;
     cursor: pointer;
     height: 20px;
@@ -421,27 +444,27 @@ body.dark .position-indicator {
 }
 
 .remove-wrapper .icon-close {
-    color: #e4e4f1;
+    color: #dce4ec;
     font-size: 10px;
     left: 4px;
     position: absolute;
     top: 4px;
 }
 
-.favorite-wrapper {
-    background: #e4e4f1;
+.favorite-icon-wrapper {
+    background: #dce4ec;
     border: 2px solid #2c3e50;
     border-radius: 12px;
-    cursor: pointer;
     display: inline-block;
     height: 22px;
+    margin-left: 5px;
     padding: 0;
-    position: relative;
-    top: 3px;
+    position: absolute;
+    top: 12px;
     width: 22px;
 }
 
-.favorite-wrapper .font-icon {
+.favorite-icon-wrapper .font-icon {
     color: #2c3e50;
     font-size: 14px;
     left: 2px;
@@ -449,8 +472,34 @@ body.dark .position-indicator {
     top: 2px;
 }
 
+/* Favorite icon indicator inside a color */
+.color .favorite-icon-wrapper {
+    border-width: 5px;
+    border-radius: 42px;
+    height: 70px;
+    margin-left: 10px;
+    opacity: 0;
+    top: 10px;
+    width: 70px;
+}
+
+.color .favorite-icon-wrapper .font-icon {
+    font-size: 50px;
+    left: 5px;
+    top: 3px;
+}
+
+/* Favorite icon indicator inside of favorite color */
+.favorite-color .color .favorite-icon-wrapper {
+    opacity: .1;
+}
+
+.favorite-color:hover .color .favorite-icon-wrapper {
+    opacity: 0;
+}
+
 body.dark .color {
-    border-color: #e4e4f1;
+    border-color: #dce4ec;
 }
 
 .new-color-template {
@@ -476,7 +525,7 @@ body.dark .color {
 
 
 /* Favorite Colors Panel */
-.favorite-colors-panel {
+.add-favorite-panel {
     max-height: 245px;
     height: 245px;
     overflow-y: auto;
@@ -484,19 +533,19 @@ body.dark .color {
     width: 100%;
 }
 
-.favorite-color {
+.add-favorite-panel .favorite-color {
     cursor: pointer;
     float: left;
     margin: 11px;
 }
 
-.favorite-color > .color{
-    border: 2px solid #5a5e5d;
+.add-favorite-panel .favorite-color > .color{
+    border: 3px solid #5a5e5d;
     height: 50px;
     width: 50px;
 }
 
-.favorite-color > span {
+.add-favorite-panel .favorite-color > span {
     font-size: 13px;
 }
 
