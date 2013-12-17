@@ -6,7 +6,8 @@ var dropSpotSize = 40;
 var savedColorSize = 100;
 var rowSize;
 var currentColorsPerRow;
-var unsavedChanges = false;
+var unsavedChanges = true;
+var unsavedColorEdits = false;
 
 $(function(){
 
@@ -16,12 +17,19 @@ $(function(){
     rowSize = $('.saved-colors-panel .row').width();
     currentColorsPerRow = savedColors.colorsPerRow(rowSize);
 
+    // Check to see if the default color is a favorite
     colorInput.checkIfFavorite('408080');
+
+    $(window).on('beforeunload', function(){
+        if(unsavedChanges) {
+            return 'Looks like you have some unsaved changes. (Your favorite colors list will not be affected either way).';
+        }
+    });
 
     $('body').on('click', '.cancel-palette', function(e) {
         if(!unsavedChanges) {
             e.preventDefault();
-            var newUrl = $('#confirm-modal').attr('data-url');
+            var newUrl = $('#confirm-page-modal').attr('data-url');
             window.location = newUrl;
             return false;
         }
@@ -41,7 +49,7 @@ $(function(){
     });
 
     $('body').on('click', '.confirm-discard', function(e){
-        var newUrl = $('#confirm-modal').attr('data-url');
+        var newUrl = $('#confirm-page-modal').attr('data-url');
         window.location = newUrl;
     });
 
@@ -275,11 +283,6 @@ $(function(){
         }
     });
 
-    /* Make color preview draggable */
-//    $('.preview-tile').draggable({
-//        revert: 'invalid'
-//    });
-
     /* Register droppable event listener */
     eventListeners.makeDroppable();
 
@@ -319,7 +322,7 @@ $(function(){
     });
 
     /* Select a Favorite color */
-    $('body').on('click', '.favorite-color', function(){
+    $('body').on('click', '#favorites-list .favorite-color', function(){
         $('#hex-input').val($(this).attr('data-hex')).keyup();
     });
 
@@ -335,6 +338,52 @@ $(function(){
         else {
             // is not a fav, add it
             colorInput.addFavorite(hex);
+        }
+    });
+
+    // Toggle edit mode
+    $('body').on('click', '.toggle-edit-wrapper', function() {
+        var $color = $(this).parents('.color');
+
+        if($color.parent().hasClass('editing-color')) {
+            var hasChanges = savedColors.hasEditChanges();
+
+            if(hasChanges) {
+                $('#confirm-edit-modal').modal('show');
+            }
+            else {
+                savedColors.endEdit();
+            }
+        }
+        else {
+            savedColors.startEdit($color)
+        }
+    });
+
+    // Cancel out of edit mode
+    $('body').on('click', '.cancel-edit', function(){
+        var hasChanges = savedColors.hasEditChanges();
+
+        if(hasChanges) {
+            $('#confirm-edit-modal').modal('show');
+        }
+        else {
+            savedColors.endEdit();
+        }
+    });
+
+    $('body').on('click', '.confirm-edit-discard', function(){
+        savedColors.endEdit();
+    });
+
+    $('body').on('click', '.save-edit, .confirm-edit-save', function(){
+        var hasChanges = savedColors.hasEditChanges();
+
+        if(hasChanges) {
+            savedColors.saveEdit();
+        }
+        else {
+            savedColors.endEdit();
         }
     });
 });
@@ -682,7 +731,7 @@ var colorInput = {
                 $('#hex-input').val(hexValue.substr(0, 6));
             }
         }
-        if(hexValue.length != 3 && hexValue.length != 6) {
+        if(hexValue.length != 6) {
             resetValue = true;
         }
 
@@ -828,6 +877,7 @@ var savedColors = {
         var newHex = $newColor.attr('data-hex');
         var newRgb = $newColor.attr('data-rgb');
         var newTag = $('#tag-input').val();
+        var isEditing = $newColor.hasClass('editing-color');
 
         if(position === undefined || position === null) {
             position = fullColorCount;
@@ -842,6 +892,10 @@ var savedColors = {
             $('.new-color-template .saved-color').removeClass('favorite-color');
         }
         $('.new-color-template .color').css('background-color', '#' + newHex);
+        if(isEditing) {
+            $('.new-color-template').addClass('editing-color');
+            $('.new-color-template .color').attr('data-original-color', newHex);
+        }
         $('.new-color-template .saved-hex').html('#' + newHex);
         $('.new-color-template .saved-rgb').html(newRgb);
         $('.new-color-template .saved-tag').html(newTag);
@@ -943,6 +997,76 @@ var savedColors = {
     colorsPerRow: function(rowWidth) {
         var spaceAfterFirstColor = rowWidth - firstDropSpotSize - savedColorSize;
         return Math.floor(spaceAfterFirstColor / (dropSpotSize + savedColorSize)) + 1;
+    },
+    startEdit: function($color) {
+        var $colorWrapper = $color.parents('.color-wrapper');
+        var currentColor = $colorWrapper.attr('data-hex');
+
+        // Enter edit mode, all changes happen to this color
+        $('#hex-input').val(currentColor).keyup();
+        $colorWrapper.addClass('editing-color');
+        $color.attr('data-original-color', currentColor);
+        $('#tag-input').val($colorWrapper.find('.saved-tag').html());
+        $('.preview-tile').addClass('editing-color');
+        $('.color-wrapper').not('.preview-tile, .editing-color').addClass('disabled-color');
+        $('.saved-color').draggable('disable');
+        $('.edit-color-state').show();
+        $('.add-color-state').hide();
+        $('.cancel-palette, .save-palette').prop('disabled', true);
+        unsavedColorEdits = true;
+    },
+    hasEditChanges: function(){
+        var hasChanges = false;
+
+        var originalColor = $('.saved-color.editing-color .color').attr('data-original-color').toLowerCase();
+        var savedHex = $('.saved-color.editing-color .saved-hex').html().substring(1).toLowerCase();
+        var savedTag = $('.saved-color.editing-color .saved-tag').html().toLowerCase();
+
+        // ask if changes should be saved
+        // if the original color equals the current hex value of the preview tile, no changes need to be saved so just exit
+        if(originalColor !== $('.preview-tile').attr('data-hex').toLowerCase()) {
+            hasChanges = true;
+        }
+
+        if(savedHex !== $('#hex-input').val().toLowerCase()) {
+            hasChanges = true;
+        }
+
+        if(savedTag !== $('#tag-input').val().toLowerCase()) {
+            hasChanges = true;
+        }
+
+        return hasChanges;
+    },
+    endEdit: function() {
+        var $color = $('.saved-color.editing-color .color');
+        var $colorWrapper = $color.parents('.color-wrapper');
+
+        $colorWrapper.removeClass('editing-color');
+        $color.removeAttr('data-original-color');
+        $('.preview-tile').removeClass('editing-color');
+        $('.color-wrapper').removeClass('disabled-color');
+        $('.saved-color').draggable('enable')
+        $('.edit-color-state').hide();
+        $('.add-color-state').show();
+        $('.cancel-palette, .save-palette').prop('disabled', false);
+        unsavedColorEdits = false;
+    },
+    saveEdit: function() {
+        $preview = $('.preview-tile');
+        var newHex = $preview.attr('data-hex');
+        var newRgb = $preview.attr('data-rgb');
+        var newTag = $('#tag-input').val();
+
+        var $colorWrapper = $('.saved-color.editing-color');
+        var $color = $('.saved-color.editing-color .color');
+        $colorWrapper.attr('data-hex', newHex).attr('data-rgb', newRgb);
+        $color.css('background-color', '#' + newHex);
+        $('.saved-hex', $colorWrapper).html('#' + newHex);
+        $('.saved-rgb', $colorWrapper).html(newRgb);
+        $('.saved-tag', $colorWrapper).html(newTag);
+
+        this.endEdit();
     }
 };
 

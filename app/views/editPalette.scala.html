@@ -16,7 +16,7 @@
     <br />
 
     <h3 class="add-color-state">Add Color</h3>
-    <h3 class="edit-color-state" style="display: none;">Edit Color</h3>
+    <h3 class="edit-color-state" style="color: #18bc9c; display: none;">Edit Color</h3>
     <div class="add-color-panel">
         <div class="row">
             <div class="col-md-1 col-sm-1 col-xs-1" style="margin-top: 21px;">
@@ -89,7 +89,9 @@
                 <input type="text" id="tag-input" class="form-control input-sm tag-input" placeholder="Optional tag" maxlength="16">
                 <br />
                 <!--<button type="button" class="btn btn-primary show-tooltip add-color" data-placement="bottom" title="Note: You can also add a color by dragging and dropping the preview into the saved colors area">Add Color</button>-->
-                <button type="button" class="btn btn-primary add-color">Add Color</button>
+                <button type="button" class="btn btn-primary add-color add-color-state">Add Color</button>
+                <button type="button" class="btn btn-default cancel-edit edit-color-state" style="display: none;">Cancel</button>
+                <button type="button" class="btn btn-success save-edit edit-color-state" style="display: none;">Save</button>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-6">
                 <h5>Favorites <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div></h5>
@@ -151,8 +153,8 @@
             <div class="color">
                 <div class="remove-wrapper"><span class="font-icon icon-close"></span></div>
                 <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
-                <div class="toggle-favorite-wrapper modify-color"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
-                <div class="edit-wrapper modify-color" style="left: 50px;"><span class="font-icon icon-pencil2"></span></div>
+                <div class="toggle-edit-wrapper modify-color"><span class="font-icon icon-pencil"></span></div>
+                <div class="toggle-favorite-wrapper modify-color" style="left: 50px;"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
             </div>
             <div class="saved-attributes">
                 <div class="saved-hex"></div>
@@ -165,17 +167,36 @@
     <br />
 
     <div class="pull-right">
-        <button data-toggle="modal" data-target="#confirm-modal" class="cancel-palette btn btn-default">Cancel</button>
+        <button data-toggle="modal" data-target="#confirm-page-modal" class="cancel-palette btn btn-default">Cancel</button>
         <button type="button" class="save-palette btn btn-success" data-url="@routes.Application.viewPalette()">Save Palette</button>
     </div>
 
-    <!-- Confirm Cancel Modal -->
-    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal-label" aria-hidden="true" data-backdrop="static" data-url="@routes.Application.index()">
+    <!-- Confirm Edit Cancel Modal -->
+    <div class="modal fade" id="confirm-edit-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-edit-modal-label" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Confirm Cancel</h4>
+                    <h4 class="modal-title" id="confirm-edit-modal-label">Confirm Cancel</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel these changes?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default confirm-edit-discard" data-dismiss="modal">Discard changes</button>
+                    <button type="button" class="btn btn-primary confirm-edit-save" data-dismiss="modal">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Confirm Page Cancel Modal -->
+    <div class="modal fade" id="confirm-page-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-page-modal-label" aria-hidden="true" data-backdrop="static" data-url="@routes.Application.index()">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="confirm-page-modal-label">Confirm Cancel</h4>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to cancel these changes?</p>
