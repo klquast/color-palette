@@ -467,6 +467,15 @@ body.dark .position-indicator {
     left: 5px;
     top: 30px;
     width: 35px;
+    z-index: 25;
+}
+
+.preview-tile:hover .modify-color {
+    display: inline-block;
+}
+
+.preview-tile .modify-color {
+    left: 27px;
 }
 
 .favorite-color .toggle-favorite-wrapper .icon-star,
@@ -538,7 +547,8 @@ body.dark .color {
     border-color: #dce4ec;
 }
 
-.new-color-template {
+.new-color-template,
+.favorite-color-template {
     display: none;
 }
 
@@ -573,6 +583,7 @@ body.dark .color {
     cursor: pointer;
     float: left;
     margin: 11px;
+    max-width: 50px;
 }
 
 .add-favorite-panel .favorite-color > .color{

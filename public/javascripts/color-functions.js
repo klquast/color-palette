@@ -794,15 +794,23 @@ var colorInput = {
     addFavorite: function(hex) {
         // ajax call
         $('.color-wrapper').filter(function(){
-            return $(this).attr('data-hex') === hex;
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
         }).addClass('favorite-color');
+        var $clone = $('#favorites-list .favorite-color-template > .favorite-color').clone();
+        $clone.attr('data-hex', hex);
+        $clone.children('.color').css('background-color', '#' + hex);
+        $clone.children('span').html('#' + hex);
+        $('.favorite-color-template').before($clone);
     },
     // Remove the given color from the list of favorites and update all occurrences of that color on the page
     removeFavorite: function(hex) {
         // ajax call
         $('.color-wrapper').filter(function(){
-            return $(this).attr('data-hex') === hex;
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
         }).removeClass('favorite-color');
+        $('#favorites-list .favorite-color').filter(function(){
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
+        }).remove();
     }
 };
 
@@ -833,8 +841,8 @@ var savedColors = {
         else {
             $('.new-color-template .saved-color').removeClass('favorite-color');
         }
-        $('.new-color-template .color').css('background-color', newHex);
-        $('.new-color-template .saved-hex').html(newHex);
+        $('.new-color-template .color').css('background-color', '#' + newHex);
+        $('.new-color-template .saved-hex').html('#' + newHex);
         $('.new-color-template .saved-rgb').html(newRgb);
         $('.new-color-template .saved-tag').html(newTag);
 

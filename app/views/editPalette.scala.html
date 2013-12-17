@@ -74,8 +74,9 @@
             <div class="clearfix visible-xs visible-sm"></div>
             <div class="col-md-2 col-sm-6 col-xs-6">
                 <h5>Preview</h5>
-                <div class="preview-tile color-wrapper" data-hex="#408080" data-rgb="rgb(64,128,128)" data-current-tag="">
+                <div class="preview-tile color-wrapper" data-hex="408080" data-rgb="rgb(64,128,128)" data-current-tag="">
                     <div class="color" style="background-color: #408080;">
+                        <div class="toggle-favorite-wrapper modify-color"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
                         <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
                     </div>
                 </div>
@@ -121,6 +122,12 @@
                         <div class="color" style="background-color: #806040;"></div>
                         <span>#806040</span>
                     </div>
+                    <div class="favorite-color-template">
+                        <div class="favorite-color" data-hex="">
+                            <div class="color" style="background-color: ;"></div>
+                            <span>#hex</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -140,7 +147,7 @@
     </div>
     <div class="new-color-template">
         <div class="reorder-drop-spot"><div class="position-indicator"></div></div>
-        <div class="saved-color color-wrapper">
+        <div class="saved-color color-wrapper" data-hex="">
             <div class="color">
                 <div class="remove-wrapper"><span class="font-icon icon-close"></span></div>
                 <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
