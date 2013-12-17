@@ -451,6 +451,42 @@ body.dark .position-indicator {
     top: 4px;
 }
 
+.saved-color:hover .modify-color {
+    display: inline-block;
+}
+
+.modify-color {
+    display: none;
+    background: #5a5e5d;
+    border: 2px solid #dce4ec;
+    border-radius: 20px;
+    cursor: pointer;
+    height: 35px;
+    padding: 0;
+    position: absolute;
+    left: 5px;
+    top: 30px;
+    width: 35px;
+}
+
+.favorite-color .toggle-favorite-wrapper .icon-star,
+.toggle-favorite-wrapper .icon-star3 {
+    display: none;
+}
+
+.favorite-color .toggle-favorite-wrapper .icon-star3,
+.toggle-favorite-wrapper .icon-star {
+    display: block;
+}
+
+.modify-color  .font-icon {
+    color: #dce4ec;
+    font-size: 20px;
+    left: 6px;
+    position: absolute;
+    top: 5px;
+}
+
 .favorite-icon-wrapper {
     background: #dce4ec;
     border: 2px solid #2c3e50;
