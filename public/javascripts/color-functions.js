@@ -16,6 +16,8 @@ $(function(){
     rowSize = $('.saved-colors-panel .row').width();
     currentColorsPerRow = savedColors.colorsPerRow(rowSize);
 
+    colorInput.checkIfFavorite('408080');
+
     $('body').on('click', '.cancel-palette', function(e) {
         if(!unsavedChanges) {
             e.preventDefault();
@@ -59,6 +61,7 @@ $(function(){
             var hex = convert.rgbToHex(rgb);
             colorInput.updateRgb(rgb);
             colorInput.updateHex(hex);
+            colorInput.checkIfFavorite(hex);
         }
     });
 
@@ -80,6 +83,7 @@ $(function(){
             var hex = convert.rgbToHex(rgb);
             colorInput.updateRgb(rgb);
             colorInput.updateHex(hex);
+            colorInput.checkIfFavorite(hex);
         }
     });
 
@@ -105,6 +109,7 @@ $(function(){
         var hex = convert.rgbToHex(rgb);
         colorInput.updateRgb(rgb);
         colorInput.updateHex(hex);
+        colorInput.checkIfFavorite(hex);
 
         $circle.triggerHandler(e);
     });
@@ -130,6 +135,7 @@ $(function(){
         var hex = convert.rgbToHex(rgb);
         colorInput.updateRgb(rgb);
         colorInput.updateHex(hex);
+        colorInput.checkIfFavorite(hex);
 
         $arrows.triggerHandler(e);
     });
@@ -255,6 +261,7 @@ $(function(){
 
         if(updateColor) {
             var rgb = convert.hexToRgb(hexValue);
+            colorInput.checkIfFavorite(hexValue);
             colorInput.updateRgb(rgb);
             var hsv = convert.rgbToHsv(rgb[0], rgb[1], rgb[2]);
             colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
@@ -269,15 +276,15 @@ $(function(){
     });
 
     /* Make color preview draggable */
-    $('.color-preview-tile').draggable({
-        revert: 'invalid'
-    });
+//    $('.preview-tile').draggable({
+//        revert: 'invalid'
+//    });
 
     /* Register droppable event listener */
     eventListeners.makeDroppable();
 
     $('.add-color').click(function(){
-        savedColors.addNewColor(null, $('.color-preview-tile'), true);
+        savedColors.addNewColor(null, $('.preview-tile'), true);
     });
 
     $(window).resize(function(){
@@ -315,46 +322,71 @@ $(function(){
     $('body').on('click', '.favorite-color', function(){
         $('#hex-input').val($(this).attr('data-hex')).keyup();
     });
+
+    /* Toggle favorite */
+    $('body').on('click', '.toggle-favorite-wrapper', function(){
+        var $context = $(this);
+        var $colorWrapper = $context.parents('.color-wrapper');
+        var hex = $colorWrapper.attr('data-hex');
+        if($colorWrapper.hasClass('favorite-color')) {
+            // is a fav, remove it
+            colorInput.removeFavorite(hex);
+        }
+        else {
+            // is not a fav, add it
+            colorInput.addFavorite(hex);
+        }
+    });
 });
 
 /*----------------------------------------------------------------------------------------------------------------------
 *                                            Color Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var colors = {
+    // Calculates and returns the hue value based on the position of the hue slider
     hue: function(){
         var pos = $('.selected-hue-arrows').css('top')
         pos = parseInt(pos);
         var div = 256/360;
         return 360 - Math.round((pos + 8)/div);
     },
+    // Returns the value of the hue input box
     hueInput: function(){
         return $('#hue-input').val();
     },
+    // Calculates and returns the saturation value based on the left position of the sat/brightness circle slider
     saturation: function(){
         var pos = $('.selected-color-circle').css('left')
         pos = parseInt(pos);
         return Math.round((pos + 8)/2.56);
     },
+    // Returns the value of the saturation input box
     saturationInput: function(){
         return $('#saturation-input').val();
     },
+    // Calculates and returns the brightness value based on the top position of the sat/brightness circle slider
     brightness: function(){
         var pos = $('.selected-color-circle').css('top');
         pos = parseInt(pos);
         return Math.round(100 - (pos + 8) / 2.56);
     },
+    // Returns the value of the brightness input box
     brightnessInput: function(){
         return $('#brightness-input').val();
     },
+    // Returns the value of the red input box
     red: function(){
         return parseInt($('#red-input').val());
     },
+    // Returns the value of the green input box
     green: function(){
         return parseInt($('#green-input').val());
     },
+    // Returns the value of the blue input box
     blue: function(){
         return parseInt($('#blue-input').val());
     },
+    // Returns the value of the hex input box
     hex: function() {
         return $('#hex-input').val();
     }
@@ -364,6 +396,8 @@ var colors = {
 *                                            Conversion Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var convert = {
+    // Converts the hue, saturation, and 'value' into an rgb value
+    //   returns an array with the red, green, and blue values
     hsvToRgb: function(hue, sat, value){
         var r, g, b;
         hue /= 360;
@@ -391,6 +425,8 @@ var convert = {
 
         return [r, g, b];
     },
+    // Converts the red, green, and blue values into an hsv value
+    //   returns an array with the hue, saturation, and 'value' values
     rgbToHsv: function(red, green, blue){
         var h, s, v;
 
@@ -417,6 +453,9 @@ var convert = {
 
         return [Math.round(h), Math.round(s*100), Math.round(v*100)];
     },
+    // Converts the red, green, and blue values into a hex value
+    //   accepts an rgb array
+    //   returns a string
     rgbToHex: function(rgb) {
         var red = rgb[0],
             green = rgb[1],
@@ -466,6 +505,9 @@ var convert = {
             return newValue;
         }
     },
+    // Converts the hex value into an rgb value
+    //   accepts a string
+    //   returns an array with the red, green, and blue values
     hexToRgb: function(hex){
         var pos1, pos2, pos3, pos4, pos5, pos6,
             r, g, b;
@@ -523,6 +565,8 @@ var convert = {
             return newValue;
         }
     },
+    // Converts the hue, saturation, and 'value' values into an hsl value
+    //   returns an array with the hue, saturation, and lightness values
     hsvToHsl: function(hue, sat, value){
         var h,
             s,
@@ -547,6 +591,8 @@ var convert = {
 *                                            Color Input Functions
 ----------------------------------------------------------------------------------------------------------------------*/
 var colorInput = {
+    // Updates the red, green, and blue input boxes with the new rgb values
+    //   accepts an rgb array
     updateRgb: function(rgb) {
         $('#red-input').val(rgb[0]);
         $('#green-input').val(rgb[1]);
@@ -554,22 +600,33 @@ var colorInput = {
 
         $('#rgb-copy-text').val('rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')');
     },
+    // Updates the hex input box the new hex value, and also updates the color preview tile
+    //   accepts a string
     updateHex: function(hex) {
         $('#hex-input').val(hex);
         this.updateColorPreview(hex);
     },
+    // Updates the hue, saturation, and brightness input boxes with the new hsv values
+    //   accepts an hsv array
     updateHsv: function(hsv){
         $('#hue-input').val(hsv[0]);
         $('#saturation-input').val(hsv[1]);
         $('#brightness-input').val(hsv[2]);
     },
+    // Updates the color preview tile with the new hex value
+    //   accepts a string
     updateColorPreview: function(hex) {
-        $('.color-preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
-        $('.color-preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
+        $('.preview-tile').attr('data-hex', hex);
+        $('.preview-tile').attr('data-rgb', $('#rgb-copy-text').val());
+        $('.preview-tile .color').css('background-color', '#' + hex);
     },
+    // Updates the background color of the color picker
+    //   accepts an rgb array
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');
     },
+    // Updates the hue slider arrows and color picker circle based on the new hsv value
+    //   accepts an hsv array
     updateSliders: function(hsv) {
         var hue = parseInt(hsv[0]),
             sat = parseInt(hsv[1]),
@@ -585,6 +642,9 @@ var colorInput = {
             'top': briPos + 'px'
         });
     },
+    // Checks whether or not the given input box contains a valid input value
+    //   value can't be undefined, empty, less than zero, or greater than the specified maximum value
+    //   returns a boolean
     checkForValue: function($inputBox) {
         var maxValue = parseInt($inputBox.attr('data-max-value'));
         var currentValue = parseInt($inputBox.val());
@@ -604,6 +664,9 @@ var colorInput = {
 
         return true;
     },
+    // Checks whether or not the given input box contains a valid hex value
+    //   checks for '#' and strips it out if present
+    //   if the input is invalid, the value is reset to the previous value (by checking the current rgb values)
     checkForHexValue: function($inputBox) {
         var hexValue = $inputBox.val();
         var resetValue = false;
@@ -627,8 +690,13 @@ var colorInput = {
             var rgb = [$('#red-input').val(), $('#green-input').val(), $('#blue-input').val()];
             var hex = convert.rgbToHex(rgb);
             colorInput.updateHex(hex);
+            colorInput.checkIfFavorite(hexValue);
         }
     },
+    // Checks whether or not the given rgb or hsv input box contains a valid input value
+    //   value can't be undefined, empty, less than zero, or greater than the specified maximum value
+    //   if invalid, call the showWarning function
+    //   returns a boolean
     validateRgbOrHsv: function($inputBox, e){
         var valid = true;
 
@@ -653,6 +721,10 @@ var colorInput = {
 
         return valid;
     },
+    // Checks whether or not the given rgb or hsv input box can be increased or decreased
+    //   checks the pressed key character value to determine whether trying to increase or decrease value
+    //   if possible, increases or decreases the input value
+    //   returns a boolean
     incDecValue: function($inputBox, character) {
         var maxValue = $inputBox.attr('data-max-value');
         var currentValue = parseInt($inputBox.val());
@@ -670,6 +742,7 @@ var colorInput = {
         }
         return valueUpdated;
     },
+    // A new, valid hsv has been entered, update all other input boxes, preview tile and sliders
     newHsvInput: function() {
         var hue = colors.hueInput(),
             saturation = colors.saturationInput(),
@@ -678,11 +751,13 @@ var colorInput = {
         var rgb = convert.hsvToRgb(hue, saturation, brightness);
         colorInput.updateRgb(rgb);
         var hex = convert.rgbToHex(rgb);
+        colorInput.checkIfFavorite(hex);
         colorInput.updateHex(hex);
         colorInput.updateColorPreview(hex);
         colorInput.updatePickerBackground(convert.hsvToRgb(hue, 100, 100));
         colorInput.updateSliders([hue, saturation, brightness]);
     },
+    // A new, valid rgb has been entered, update all other input boxes, preview tile and sliders
     newRgbInput: function() {
         var red = colors.red(),
             green = colors.green(),
@@ -691,12 +766,51 @@ var colorInput = {
         var hsv = convert.rgbToHsv(red, green, blue);
         colorInput.updateHsv(hsv);
         var hex = convert.rgbToHex([red, green, blue]);
+        colorInput.checkIfFavorite(hex);
         colorInput.updateHex(hex);
         colorInput.updateColorPreview(hex);
         colorInput.updatePickerBackground(convert.hsvToRgb(hsv[0], 100, 100));
         colorInput.updateSliders(hsv);
 
         $('#rgb-copy-text').val('rgb(' + red + ',' + green + ',' + blue + ')');
+    },
+    // Check whether or not the specified color is a favorite
+    //   if yes, show fav indicator on the preview
+    //   if no, hide fav indicator on the preview
+    checkIfFavorite: function(hex) {
+        var $favorites = $('#favorites-list .favorite-color');
+        var isFavorite = $favorites.filter(function(){
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
+        }).length > 0;
+
+        if(isFavorite) {
+            $('.preview-tile').addClass('favorite-color');
+        }
+        else {
+            $('.preview-tile').removeClass('favorite-color');
+        }
+    },
+    // Add the given color to the list of favorites and update all occurrences of that color on the page
+    addFavorite: function(hex) {
+        // ajax call
+        $('.color-wrapper').filter(function(){
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
+        }).addClass('favorite-color');
+        var $clone = $('#favorites-list .favorite-color-template > .favorite-color').clone();
+        $clone.attr('data-hex', hex);
+        $clone.children('.color').css('background-color', '#' + hex);
+        $clone.children('span').html('#' + hex);
+        $('.favorite-color-template').before($clone);
+    },
+    // Remove the given color from the list of favorites and update all occurrences of that color on the page
+    removeFavorite: function(hex) {
+        // ajax call
+        $('.color-wrapper').filter(function(){
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
+        }).removeClass('favorite-color');
+        $('#favorites-list .favorite-color').filter(function(){
+            return $(this).attr('data-hex').toLowerCase() === hex.toLowerCase();
+        }).remove();
     }
 };
 
@@ -711,8 +825,8 @@ var savedColors = {
         var savedColorCount = $('.saved-color', $lastRow).length;
         var fullColorCount = $('.saved-color').length;
 
-        var newHex = $newColor.attr('data-current-hex');
-        var newRgb = $newColor.attr('data-current-rgb');
+        var newHex = $newColor.attr('data-hex');
+        var newRgb = $newColor.attr('data-rgb');
         var newTag = $('#tag-input').val();
 
         if(position === undefined || position === null) {
@@ -720,9 +834,15 @@ var savedColors = {
             $('.new-color-template .reorder-drop-spot').attr('data-new-pos', position);
         }
 
-        $('.new-color-template .saved-color').attr('data-pos', position).attr('data-current-hex', newHex).attr('data-current-rgb', newRgb);
-        $('.new-color-template .color').css('background-color', newHex);
-        $('.new-color-template .saved-hex').html(newHex);
+        $('.new-color-template .saved-color').attr('data-pos', position).attr('data-hex', newHex).attr('data-rgb', newRgb);
+        if($newColor.hasClass('favorite-color')) {
+            $('.new-color-template .saved-color').addClass('favorite-color');
+        }
+        else {
+            $('.new-color-template .saved-color').removeClass('favorite-color');
+        }
+        $('.new-color-template .color').css('background-color', '#' + newHex);
+        $('.new-color-template .saved-hex').html('#' + newHex);
         $('.new-color-template .saved-rgb').html(newRgb);
         $('.new-color-template .saved-tag').html(newTag);
 
@@ -735,12 +855,13 @@ var savedColors = {
         var spaceRemaining = rowWidth - dropSpotSpace - savedColorSpace;
         if(spaceRemaining < spaceNeeded) {
             $lastRow.after('<div class="row"></div>');
-            var $dropSpot = $('.color-drop-spot');
+            var $dropSpot = $('.last-drop-spot');
             $lastRow = $('.saved-colors-panel .row').last();
             $lastRow.html($dropSpot);
         }
         if(position === fullColorCount) {
-            $('.color-drop-spot').before(clone);
+//            $('.color-drop-spot').before(clone);
+            $('.last-drop-spot').before(clone);
         }
         else {
             // put in new spot and increment all items after it
@@ -812,7 +933,7 @@ var savedColors = {
             itemsCount++;
         }
 
-        var $dropSpot = $('.color-drop-spot');
+        var $dropSpot = $('.last-drop-spot');
         $lastRow = $newHtml.find('.row').last();
         $lastRow.append($dropSpot);
         $('.saved-colors-panel').html($newHtml.html());
@@ -882,30 +1003,30 @@ var message = {
 ----------------------------------------------------------------------------------------------------------------------*/
 var eventListeners = {
     makeDroppable: function(){
-        $('.color-drop-spot').droppable({
-            accept: '.color-preview-tile',
-            activeClass: 'ui-state-hover',
-            hoverClass: 'ui-state-active',
-            drop: function(e, ui) {
-                $('.color-preview-tile').animate({
-                    'top': '0',
-                    'left': '0'
-                });
-                savedColors.addNewColor(null, $('.color-preview-tile'), true);
-            }
-        });
+//        $('.color-drop-spot').droppable({
+//            accept: '.preview-tile',
+//            activeClass: 'ui-state-hover',
+//            hoverClass: 'ui-state-active',
+//            drop: function(e, ui) {
+//                $('.preview-tile').animate({
+//                    'top': '0',
+//                    'left': '0'
+//                });
+//                savedColors.addNewColor(null, $('.preview-tile'), true);
+//            }
+//        });
         $('.reorder-drop-spot').droppable({
-            accept: '.color-preview-tile, .saved-color',
+            accept: '.preview-tile, .saved-color',
             activeClass: 'ui-state-hover',
             hoverClass: 'ui-state-active',
             drop: function(e, ui) {
-                if($(ui.helper.context).hasClass('color-preview-tile')) {
-                    $('.color-preview-tile').animate({
+                if($(ui.helper.context).hasClass('preview-tile')) {
+                    $('.preview-tile').animate({
                         'top': '0',
                         'left': '0'
                     });
                     var position = $(e.target).attr('data-new-pos');
-                    savedColors.addNewColor(position, $('.color-preview-tile'), true);
+                    savedColors.addNewColor(position, $('.preview-tile'), true);
                 }
                 else {
                     var position = $(e.target).attr('data-new-pos');

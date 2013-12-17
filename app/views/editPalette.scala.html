@@ -19,7 +19,7 @@
     <h3 class="edit-color-state" style="display: none;">Edit Color</h3>
     <div class="add-color-panel">
         <div class="row">
-            <div class="col-md-1 col-sm-1 col-xs-1">
+            <div class="col-md-1 col-sm-1 col-xs-1" style="margin-top: 21px;">
                 <div class="hue-slider">
                     <div class="hue-slider-backdrop">
                         <img src="@routes.Assets.at("images/hue-slider.png")" alt="Hue Slider" />
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-11 col-xs-10" style="min-width: 290px;">
+            <div class="col-md-3 col-sm-11 col-xs-10" style="margin-top: 21px; min-width: 290px;">
                 <div class="color-picker">
                     <div class="color-picker-backdrop">
                         <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
@@ -37,7 +37,7 @@
             </div>
             <div class="clearfix visible-xs visible-sm"></div>
             <div class="col-md-3 col-md-3 col-sm-12 col-xs-12 color-attributes-short">
-                <h4>Color Attributes</h4>
+                <h5>Attributes</h5>
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
@@ -73,8 +73,13 @@
             </div>
             <div class="clearfix visible-xs visible-sm"></div>
             <div class="col-md-2 col-sm-6 col-xs-6">
-                <h4>Color Preview</h4>
-                <div class="color-preview-tile" data-current-hex="#408080" data-current-rgb="rgb(64,128,128)" data-current-tag=""></div>
+                <h5>Preview</h5>
+                <div class="preview-tile color-wrapper" data-hex="408080" data-rgb="rgb(64,128,128)" data-current-tag="">
+                    <div class="color" style="background-color: #408080;">
+                        <div class="toggle-favorite-wrapper modify-color"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
+                        <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="control-label" for="hex-input">#</label>
                     <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" value="408080" maxlength="7">
@@ -83,11 +88,12 @@
                 <!--<span class="font-icon icon-tag"></span>-->
                 <input type="text" id="tag-input" class="form-control input-sm tag-input" placeholder="Optional tag" maxlength="16">
                 <br />
-                <button type="button" class="btn btn-primary show-tooltip add-color" data-placement="bottom" title="Note: You can also add a color by dragging and dropping the preview into the saved colors area">Add Color</button>
+                <!--<button type="button" class="btn btn-primary show-tooltip add-color" data-placement="bottom" title="Note: You can also add a color by dragging and dropping the preview into the saved colors area">Add Color</button>-->
+                <button type="button" class="btn btn-primary add-color">Add Color</button>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-6">
-                <h4>Your Favorite Colors <div class="favorite-wrapper"><span class="font-icon icon-star3"></span></div></h4>
-                <div class="favorite-colors-panel form-control">
+                <h5>Favorites <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div></h5>
+                <div id="favorites-list" class="add-favorite-panel form-control">
                     <div class="favorite-color" data-hex="5a5e5d">
                         <div class="color" style="background-color: #5a5e5d;"></div>
                         <span>#5a5e5d</span>
@@ -116,6 +122,12 @@
                         <div class="color" style="background-color: #806040;"></div>
                         <span>#806040</span>
                     </div>
+                    <div class="favorite-color-template">
+                        <div class="favorite-color" data-hex="">
+                            <div class="color" style="background-color: ;"></div>
+                            <span>#hex</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,18 +135,25 @@
 
     <br />
 
-    <h3>Colors</h3>
+    <h3>Palette Colors</h3>
+    <p>Use the tools above to add colors to the palette. You can rearrange colors that you've added by dragging and dropping them into a new position.</p>
     <div class="saved-colors-panel">
         <div class="row">
-            <div class="color-drop-spot">
-                Drop<br/>Color<br />Here
-            </div>
+            <!--<div class="color-drop-spot">-->
+                <!--Drop<br/>Color<br />Here-->
+            <!--</div>-->
+            <div class="reorder-drop-spot last-drop-spot"><div class="position-indicator"></div></div>
         </div>
     </div>
     <div class="new-color-template">
         <div class="reorder-drop-spot"><div class="position-indicator"></div></div>
-        <div class="saved-color">
-            <div class="color"><div class="remove-wrapper"><span class="font-icon icon-close"></span></div></div>
+        <div class="saved-color color-wrapper" data-hex="">
+            <div class="color">
+                <div class="remove-wrapper"><span class="font-icon icon-close"></span></div>
+                <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
+                <div class="toggle-favorite-wrapper modify-color"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
+                <div class="edit-wrapper modify-color" style="left: 50px;"><span class="font-icon icon-pencil2"></span></div>
+            </div>
             <div class="saved-attributes">
                 <div class="saved-hex"></div>
                 <div class="saved-rgb"></div>
