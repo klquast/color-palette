@@ -13,6 +13,7 @@ CREATE TABLE paletteColor (
   hexValue VARCHAR(12) NOT NULL ,
   orderNumber INT NOT NULL ,
   paletteId INT NOT NULL ,
+  tag VARCHAR(16) ,
   PRIMARY KEY(paletteColorId),
   FOREIGN KEY(paletteId) REFERENCES palette(paletteId));
   

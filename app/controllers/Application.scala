@@ -19,12 +19,19 @@ object Application extends Controller {
       Palette(
         "first",
         Seq(
-          Color("FFF", true, "description", Some(1), 0),
-          Color("000", true, "description 2", Some(2), 1)),
+          Color("FFF", "description", 0, Option("bright")),
+          Color("000", "description 2", 1, None)),
         true,
         "first palette",
         Some(1)),
-      Palette("second", Seq(Color("FFF", true, "description", Some(1), 0), Color("000", true, "description 2", Some(2), 1)), true, "first palette", Some(2)))
+      Palette(
+        "second", 
+        Seq(
+          Color("FFF", "description", 0, None),
+          Color("000", "description 2", 1, Option("dark"))),
+        true, 
+        "first palette", 
+        Some(2)))
     Ok(views.html.editPalette(palettes))
   }
 
