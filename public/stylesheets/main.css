@@ -504,6 +504,11 @@ body.dark .position-indicator {
     color: #18bc9c;
 }
 
+.favorite-color .toggle-favorite-wrapper .icon-star3 {
+    color: #18bc9c;
+}
+
+
 .favorite-color .toggle-favorite-wrapper .icon-star,
 .toggle-favorite-wrapper .icon-star3 {
     display: none;
