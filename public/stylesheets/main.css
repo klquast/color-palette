@@ -495,7 +495,7 @@ body.dark .position-indicator {
 }
 
 .favorite-color:hover .color .favorite-icon-wrapper {
-    opacity: 0;
+    opacity: 0.05;
 }
 
 body.dark .color {
