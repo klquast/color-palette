@@ -7,7 +7,6 @@ var savedColorSize = 100;
 var rowSize;
 var currentColorsPerRow;
 var unsavedChanges = true;
-var unsavedColorEdits = false;
 
 $(function(){
 
@@ -1013,7 +1012,6 @@ var savedColors = {
         $('.edit-color-state').show();
         $('.add-color-state').hide();
         $('.cancel-palette, .save-palette').prop('disabled', true);
-        unsavedColorEdits = true;
     },
     hasEditChanges: function(){
         var hasChanges = false;
@@ -1050,7 +1048,6 @@ var savedColors = {
         $('.edit-color-state').hide();
         $('.add-color-state').show();
         $('.cancel-palette, .save-palette').prop('disabled', false);
-        unsavedColorEdits = false;
     },
     saveEdit: function() {
         $preview = $('.preview-tile');
