@@ -564,8 +564,9 @@ var colorInput = {
         $('#brightness-input').val(hsv[2]);
     },
     updateColorPreview: function(hex) {
-        $('.preview-tile').css('background-color', '#' + hex).attr('data-current-hex', '#' + hex);
+        $('.preview-tile').attr('data-current-hex', '#' + hex);
         $('.preview-tile').attr('data-current-rgb', $('#rgb-copy-text').val());
+        $('.preview-tile .color').css('background-color', '#' + hex);
     },
     updatePickerBackground: function(rgb) {
         $('.color-picker-backdrop').css('background-color', 'rgb(' + rgb + ')');

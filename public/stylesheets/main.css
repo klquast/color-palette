@@ -326,9 +326,9 @@ a.toggle-bg-color:hover > span {
 
 /* Color Preview */
 .preview-tile {
-    background-color: #408080;
+    /*background-color: #408080;
     border: 5px solid #5a5e5d;
-    border-radius: 4px;
+    border-radius: 4px;*/
     /*cursor: move;*/
     height: 100px;
     margin-bottom: 10px;
