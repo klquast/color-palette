@@ -85,10 +85,8 @@
                     <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" value="408080" maxlength="7">
                     <span class="font-icon icon-copy2 copy-to-clipboard" data-clipboard-target="hex-input"></span>
                 </div>
-                <!--<span class="font-icon icon-tag"></span>-->
                 <input type="text" id="tag-input" class="form-control input-sm tag-input" placeholder="Optional tag" maxlength="16">
                 <br />
-                <!--<button type="button" class="btn btn-primary show-tooltip add-color" data-placement="bottom" title="Note: You can also add a color by dragging and dropping the preview into the saved colors area">Add Color</button>-->
                 <button type="button" class="btn btn-primary add-color add-color-state">Add Color</button>
                 <button type="button" class="btn btn-default cancel-edit edit-color-state" style="display: none;">Cancel</button>
                 <button type="button" class="btn btn-success save-edit edit-color-state" style="display: none;">Save</button>
@@ -138,7 +136,7 @@
     <br />
 
     <h3>Palette Colors</h3>
-    <p>Use the tools above to add colors to the palette. You can rearrange colors that you've added by dragging and dropping them into a new position.</p>
+    <p>Use the tools above to add colors to the palette. You can rearrange colors that you've added by dragging and dropping them into a new position. <a href="#confirm-remove-modal" class="remove-all-saved" data-toggle="modal">Remove All</a></p>
     <div class="saved-colors-panel">
         <div class="row">
             <!--<div class="color-drop-spot">-->
@@ -208,6 +206,26 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- Confirm Remove All Colors Modal -->
+    <div class="modal fade" id="confirm-remove-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-remove-modal-label" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="confirm-remove-modal-label">Confirm Remove All</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove all colors?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default confirm-remove-none" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary confirm-remove-all" data-dismiss="modal">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 }
 
 @scripts = {

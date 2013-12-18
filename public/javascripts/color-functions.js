@@ -6,7 +6,7 @@ var dropSpotSize = 40;
 var savedColorSize = 100;
 var rowSize;
 var currentColorsPerRow;
-var unsavedChanges = true;
+var unsavedChanges = false;
 
 $(function(){
 
@@ -19,12 +19,14 @@ $(function(){
     // Check to see if the default color is a favorite
     colorInput.checkIfFavorite('408080');
 
+    // Make them confirm reload or navigating away with unsaved changes
     $(window).on('beforeunload', function(){
         if(unsavedChanges) {
             return 'Looks like you have some unsaved changes. (Your favorite colors list will not be affected either way).';
         }
     });
 
+    // Cancel palette button
     $('body').on('click', '.cancel-palette', function(e) {
         if(!unsavedChanges) {
             e.preventDefault();
@@ -34,6 +36,7 @@ $(function(){
         }
     });
 
+    // Save palette button
     $('body').on('click', '.save-palette', function(e) {
         var newUrl = $(this).attr('data-url');
         if(!unsavedChanges) {
@@ -47,9 +50,16 @@ $(function(){
         }
     });
 
+    // Confirm discard changes
     $('body').on('click', '.confirm-discard', function(e){
         var newUrl = $('#confirm-page-modal').attr('data-url');
         window.location = newUrl;
+    });
+
+    // Confirm remove all saved colors
+    $('body').on('click', '.confirm-remove-all', function(){
+        $('.saved-colors-panel .saved-color').remove();
+        $('.saved-colors-panel .reorder-drop-spot').not('.last-drop-spot').remove();
     });
 
     /* Make selected-color-circle draggable */
