@@ -1,4 +1,4 @@
-@(palettes: Seq[Palette])
+@(palettes: Seq[Palette], favorites: Seq[String])
 
 @main("Home", scripts) {
 
@@ -94,34 +94,12 @@
             <div class="col-md-3 col-sm-6 col-xs-6">
                 <h5>Favorites <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div></h5>
                 <div id="favorites-list" class="add-favorite-panel form-control">
-                    <div class="favorite-color" data-hex="5a5e5d">
-                        <div class="color" style="background-color: #5a5e5d;"></div>
-                        <span>#5a5e5d</span>
-                    </div>
-                    <div class="favorite-color" data-hex="408080">
-                        <div class="color" style="background-color: #408080;"></div>
-                        <span>#408080</span>
-                    </div>
-                    <div class="favorite-color" data-hex="6F4080">
-                        <div class="color" style="background-color: #6F4080;"></div>
-                        <span>#6F4080</span>
-                    </div>
-                    <div class="favorite-color" data-hex="804062">
-                        <div class="color" style="background-color: #804062;"></div>
-                        <span>#804062</span>
-                    </div>
-                    <div class="favorite-color" data-hex="508040">
-                        <div class="color" style="background-color: #508040;"></div>
-                        <span>#508040</span>
-                    </div>
-                    <div class="favorite-color" data-hex="404180">
-                        <div class="color" style="background-color: #404180;"></div>
-                        <span>#404180</span>
-                    </div>
-                    <div class="favorite-color" data-hex="806040">
-                        <div class="color" style="background-color: #806040;"></div>
-                        <span>#806040</span>
-                    </div>
+                    @for(favorite <- favorites) {
+                        <div class="favorite-color" data-hex="@favorite">
+                            <div class="color" style="background-color: #@favorite;"></div>
+                            <span>#@favorite</span>
+                        </div>
+                    }
                     <div class="favorite-color-template">
                         <div class="favorite-color" data-hex="">
                             <div class="color" style="background-color: ;"></div>

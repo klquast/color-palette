@@ -7,20 +7,6 @@ import play.api.libs.json._
 
 import scala.collection.mutable.ListBuffer
 
-/*
-
-# Favorites API
-GET /api/favorites                  controllers.Api.getAllFavorites()
-DELETE /api/favorites/:hexValue     controllers.Api.removeFavorite(hexValue: String)
-PUT /api/favorites/:hexValue        controllers.Api.createFavorite(hexValue: String)
-
-# Palette API
-GET /api/palettes                   controllers.Api.getAllPalettes
-GET /api/palettes/:paletteId        controllers.Api.getPaletteById(paletteId: Int)
-PUSH /api/palettes                  controllers.Api.createPalette()
-PUT /api/palettes/:paletteId        controllers.Api.updatePalette(paletteId: Int)
-DELETE /api/palettes/:paletteId     controllers.Api.removePalette(paletteId: Int)
-*/
 
 object Api extends Controller {
 
@@ -28,21 +14,21 @@ object Api extends Controller {
   implicit val colorFormat = Json.format[Color]
   implicit val paletteFormat = Json.format[Palette]
 
-  val cachedFavorites: ListBuffer[String] = ListBuffer("000000", "FFFFFF", "FF0000", "00FF00", "0000FF")
+  val cachedFavorites: ListBuffer[String] = ListBuffer("408080", "6F4080", "804062", "404180", "508040")
   val cachedPalettes: ListBuffer[Palette] = ListBuffer(
       Palette(
         "first",
         Seq(
-          Color("FFF", "description", 0, Option("bright")),
-          Color("000", "description 2", 1, None)),
+          Color("FFFAAA", "description", 0, Option("bright")),
+          Color("000BBB", "description 2", 1, None)),
         true,
         "first palette",
         Some(1)),
       Palette(
         "second", 
         Seq(
-          Color("FFF", "description", 0, None),
-          Color("000", "description 2", 1, Option("dark"))),
+          Color("FFF0A0", "description", 0, None),
+          Color("0B0B0B", "description 2", 1, Option("dark"))),
         true, 
         "first palette", 
         Some(2)))

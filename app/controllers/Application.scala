@@ -15,24 +15,7 @@ object Application extends Controller {
   }
 
   def editPalette = Action {
-    val palettes = Seq(
-      Palette(
-        "first",
-        Seq(
-          Color("FFF", "description", 0, Option("bright")),
-          Color("000", "description 2", 1, None)),
-        true,
-        "first palette",
-        Some(1)),
-      Palette(
-        "second", 
-        Seq(
-          Color("FFF", "description", 0, None),
-          Color("000", "description 2", 1, Option("dark"))),
-        true, 
-        "first palette", 
-        Some(2)))
-    Ok(views.html.editPalette(palettes))
+    Ok(views.html.editPalette(Api.cachedPalettes, Api.cachedFavorites))
   }
 
   def overview = Action {
