@@ -18,6 +18,10 @@ object Application extends Controller {
     Ok(views.html.editPalette(Api.cachedPalettes, Api.cachedFavorites))
   }
 
+  def editPaletteKO = Action {
+    Ok(views.html.editPaletteKO(Api.cachedFavorites))
+  }
+
   def overview = Action {
     Ok(views.html.overview())
   }

@@ -330,7 +330,7 @@ a.toggle-bg-color:hover > span {
     /*background-color: #408080;
     border: 5px solid #5a5e5d;
     border-radius: 4px;*/
-    cursor: move;
+    /*cursor: move;*/
     height: 100px;
     margin-bottom: 10px;
     width: 100px;
@@ -392,13 +392,13 @@ body.dark .ui-state-active {
     width: 24px;
 }
 
-.position-indicator {
+/*.position-indicator {
     background: #5a5e5d;
 }
 
 body.dark .position-indicator {
     background: #dce4ec;
-}
+}*/
 
 .saved-color {
     cursor: move;
@@ -509,7 +509,7 @@ body.dark .position-indicator {
     color: #18bc9c;
 }
 
-.favorite-color .toggle-favorite-wrapper .icon-star,
+/*.favorite-color .toggle-favorite-wrapper .icon-star,
 .toggle-favorite-wrapper .icon-star3 {
     display: none;
 }
@@ -517,7 +517,7 @@ body.dark .position-indicator {
 .favorite-color .toggle-favorite-wrapper .icon-star3,
 .toggle-favorite-wrapper .icon-star {
     display: block;
-}
+}*/
 
 .modify-color  .font-icon {
     color: #dce4ec;
@@ -554,7 +554,8 @@ body.dark .position-indicator {
     border-radius: 42px;
     height: 70px;
     margin-left: 10px;
-    opacity: 0;
+    /*opacity: 0;*/
+    opacity: .1;
     top: 10px;
     width: 70px;
 }

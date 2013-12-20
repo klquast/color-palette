@@ -14,6 +14,10 @@ GET     /view-palette               controllers.Application.viewPalette
 # Edit Palette page
 GET     /edit-palette               controllers.Application.editPalette
 
+# Edit Palette KO page
+GET     /edit-palette-ko            controllers.Application.editPaletteKO
+
+
 # Overview page
 GET     /overview                   controllers.Application.overview
 
