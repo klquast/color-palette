@@ -14,5 +14,27 @@ GET     /view-palette               controllers.Application.viewPalette
 # Edit Palette page
 GET     /edit-palette               controllers.Application.editPalette
 
+# Edit Palette KO page
+GET     /edit-palette-ko            controllers.Application.editPaletteKO
+
+
 # Overview page
 GET     /overview                   controllers.Application.overview
+
+
+
+####################  API #######################
+
+#terminology: getAll, get*ById, create, remove, update
+
+# Favorites API
+GET /api/favorites                  controllers.Api.getAllFavorites()
+DELETE /api/favorites/:hexValue     controllers.Api.removeFavorite(hexValue: String)
+PUT /api/favorites/:hexValue        controllers.Api.createFavorite(hexValue: String)
+
+# Palette API
+GET /api/palettes                   controllers.Api.getAllPalettes
+GET /api/palettes/:paletteId        controllers.Api.getPaletteById(paletteId: Int)
+POST /api/palettes                  controllers.Api.createPalette()
+PUT /api/palettes/:paletteId        controllers.Api.updatePalette(paletteId: Int)
+DELETE /api/palettes/:paletteId     controllers.Api.removePalette(paletteId: Int)

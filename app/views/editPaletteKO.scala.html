@@ -1,4 +1,4 @@
-@(palettes: Seq[Palette], favorites: Seq[String])
+@(favorites: Seq[String])
 
 @main("Home", scripts, styles) {
 
@@ -23,15 +23,15 @@
                 <div class="hue-slider">
                     <div class="hue-slider-backdrop">
                         <img src="@routes.Assets.at("images/hue-slider.png")" alt="Hue Slider" />
-                        <div class="selected-hue-arrows"></div>
+                        <div class="selected-hue-arrows" data-bind="style: { top: hueSliderTop() }"></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 col-sm-11 col-xs-10" style="margin-top: 21px; min-width: 290px;">
                 <div class="color-picker">
-                    <div class="color-picker-backdrop">
+                    <div class="color-picker-backdrop" data-bind="style: { backgroundColor: colorPickerBackground() }">
                         <img src="@routes.Assets.at("images/color-picker-gradient.png")" alt="Color Picker">
-                        <div class="selected-color-circle"></div>
+                        <div class="selected-color-circle" data-bind="style: { top: colorPickerTop(), left: colorPickerLeft() }"></div>
                     </div>
                 </div>
             </div>
@@ -42,31 +42,31 @@
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <label class="control-label" for="hue-input">Hue</label>
-                            <input class="form-control input-sm" id="hue-input" type="text" placeholder="Hue" value="180" maxlength="3" data-max-value="360">
+                            <input class="form-control input-sm" id="hue-input" type="text" placeholder="Hue" data-bind="value: currentHue" maxlength="3" data-max-value="360">
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="saturation-input">Saturation</label>
-                            <input class="form-control input-sm" id="saturation-input" type="text" placeholder="Sat" value="50" maxlength="3" data-max-value="100">
+                            <input class="form-control input-sm" id="saturation-input" type="text" placeholder="Sat" data-bind="value: currentSaturation" maxlength="3" data-max-value="100">
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="brightness-input">Brightness</label>
-                            <input class="form-control input-sm" id="brightness-input" type="text" placeholder="Bri" value="50" maxlength="3" data-max-value="100">
+                            <input class="form-control input-sm" id="brightness-input" type="text" placeholder="Bri" data-bind="value: currentBrightness" maxlength="3" data-max-value="100">
                         </div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="form-group">
                             <label class="control-label" for="red-input">Red</label>
                             <span class="font-icon icon-copy2 copy-to-clipboard" data-clipboard-target="rgb-copy-text"></span>
-                            <input type="hidden" id="rgb-copy-text" value="rgb(64,128,128)">
-                            <input class="form-control input-sm" id="red-input" type="text" placeholder="Red" value="64" maxlength="3" data-max-value="255">
+                            <input type="hidden" id="rgb-copy-text" data-bind="value: currentRgb">
+                            <input class="form-control input-sm" id="red-input" type="text" placeholder="Red" data-bind="value: currentRed" maxlength="3" data-max-value="255">
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="green-input">Green</label>
-                            <input class="form-control input-sm" id="green-input" type="text" placeholder="Green" value="128" maxlength="3" data-max-value="255">
+                            <input class="form-control input-sm" id="green-input" type="text" placeholder="Green" data-bind="value: currentGreen" maxlength="3" data-max-value="255">
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="blue-input">Blue</label>
-                            <input class="form-control input-sm" id="blue-input" type="text" placeholder="Blue" value="128" maxlength="3" data-max-value="255">
+                            <input class="form-control input-sm" id="blue-input" type="text" placeholder="Blue" data-bind="value: currentBlue" maxlength="3" data-max-value="255">
                         </div>
                     </div>
                 </div>
@@ -74,37 +74,38 @@
             <div class="clearfix visible-xs visible-sm"></div>
             <div class="col-md-2 col-sm-6 col-xs-6">
                 <h5>Preview</h5>
-                <div class="preview-tile color-wrapper" data-hex="408080" data-rgb="rgb(64,128,128)" data-current-tag="">
-                    <div class="color" style="background-color: #408080;">
-                        <div class="toggle-favorite-wrapper modify-color"><span class="font-icon icon-star3"></span><span class="font-icon icon-star"></span></div>
-                        <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
+                <div class="preview-tile color-wrapper" data-bind="attr: { 'data-hex': currentHex }" data-rgb="rgb(64,128,128)" data-current-tag="">
+                    <div class="color" data-bind="style: { backgroundColor: '#' + currentHex() }">
+                        <div class="toggle-favorite-wrapper modify-color" data-bind="click: toggleFavorite.bind($data, $root.currentHex())">
+                            <!-- ko if: favorites().indexOf(currentHex()) > -1 -->
+                                <span class="font-icon icon-star3"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: favorites().indexOf(currentHex()) > -1 -->
+                                <span class="font-icon icon-star"></span>
+                            <!-- /ko -->
+                        </div>
+                        <!-- ko if: favorites().indexOf(currentHex()) > -1 -->
+                            <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
+                        <!-- /ko -->
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="hex-input">#</label>
-                    <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" value="408080" maxlength="7">
+                    <input class="form-control input-sm hex-input" id="hex-input" type="text" placeholder="Hex" data-bind="value: currentHex" maxlength="7">
                     <span class="font-icon icon-copy2 copy-to-clipboard" data-clipboard-target="hex-input"></span>
                 </div>
-                <input type="text" id="tag-input" class="form-control input-sm tag-input" placeholder="Optional tag" maxlength="16">
+                <input type="text" id="tag-input" class="form-control input-sm tag-input" placeholder="Optional tag" maxlength="16" data-bind="value: currentTag">
                 <br />
-                <button type="button" class="btn btn-primary add-color add-color-state">Add Color</button>
+                <button type="button" class="btn btn-primary add-color add-color-state" data-bind="click: addColor.bind($data, new Color({ hex: currentHex(), rgb: currentRgb(), tag: currentTag() }))">Add Color</button>
                 <button type="button" class="btn btn-default cancel-edit edit-color-state" style="display: none;">Cancel</button>
                 <button type="button" class="btn btn-success save-edit edit-color-state" style="display: none;">Save</button>
             </div>
             <div class="col-md-3 col-sm-6 col-xs-6">
                 <h5>Favorites <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div></h5>
-                <div id="favorites-list" class="add-favorite-panel form-control">
-                    @for(favorite <- favorites) {
-                        <div class="favorite-color" data-hex="@favorite">
-                            <div class="color" style="background-color: #@favorite;"></div>
-                            <span>#@favorite</span>
-                        </div>
-                    }
-                    <div class="favorite-color-template">
-                        <div class="favorite-color" data-hex="">
-                            <div class="color" style="background-color: ;"></div>
-                            <span>#hex</span>
-                        </div>
+                <div id="favorites-list" class="add-favorite-panel form-control" data-bind="foreach: favorites">
+                    <div class="favorite-color" data-bind="attr: { 'data-hex': $data }, click: $root.changeCurrentHex">
+                        <div class="color" data-bind="style: { backgroundColor: '#' + $data }"></div>
+                        <span data-bind="text: '#' + $data"></span>
                     </div>
                 </div>
             </div>
@@ -117,9 +118,32 @@
     <p>Use the tools above to add colors to the palette. You can rearrange colors that you've added by dragging and dropping them into a new position. <a href="#confirm-remove-modal" class="remove-all-saved" data-toggle="modal">Remove All</a></p>
     <div class="saved-colors-panel">
         <div class="row">
-            <!--<div class="color-drop-spot">-->
-                <!--Drop<br/>Color<br />Here-->
-            <!--</div>-->
+            <!-- ko foreach: colors -->
+                <div class="reorder-drop-spot"><div class="position-indicator"></div></div>
+                <div class="saved-color color-wrapper" data-bind="attr: { 'data-hex': hex() }">
+                    <div class="color" data-bind="style: { backgroundColor: '#' + hex() }">
+                        <div class="remove-wrapper" data-bind="click: $root.removeColor"><span class="font-icon icon-close"></span></div>
+                        <!-- ko if: $root.favorites().indexOf(hex()) > -1 -->
+                            <div class="favorite-icon-wrapper"><span class="font-icon icon-star3"></span></div>
+                        <!-- /ko -->
+                        <div class="toggle-edit-wrapper modify-color"><span class="font-icon icon-pencil"></span></div>
+                        <div class="toggle-favorite-wrapper modify-color" style="left: 50px;" data-bind="click: $root.toggleFavorite.bind($data, hex())">
+                            <!-- ko if: $root.favorites().indexOf(hex()) > -1 -->
+                            <span class="font-icon icon-star3"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.favorites().indexOf(hex()) > -1 -->
+                            <span class="font-icon icon-star"></span>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                    <div class="saved-attributes">
+                        <div class="saved-hex" data-bind="text: '#' + hex()"></div>
+                        <div class="saved-rgb" data-bind="text: rgb()"></div>
+                        <div class="saved-tag" data-bind="text: tag()"></div>
+                    </div>
+                </div>
+            <!-- /ko -->
+
             <div class="reorder-drop-spot last-drop-spot"><div class="position-indicator"></div></div>
         </div>
     </div>
@@ -198,7 +222,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default confirm-remove-none" data-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-primary confirm-remove-all" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-primary confirm-remove-all" data-dismiss="modal" data-bind="click: removeAllColors">Yes</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -207,10 +231,11 @@
 }
 
 @styles = {
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main-ko.css")">
 }
 
 @scripts = {
     <script src="@routes.Assets.at("javascripts/color-functions.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/edit-palette.js")" type="text/javascript"></script>
+    <!--<script src="@routes.Assets.at("javascripts/edit-palette.js")" type="text/javascript"></script>-->
+    <script src="@routes.Assets.at("javascripts/ko.js")" type="text/javascript"></script>
 }
